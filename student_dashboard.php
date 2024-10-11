@@ -1,9 +1,4 @@
 <?php
-
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 // Start session if not already started
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -77,7 +72,7 @@ if ($course_id_result->num_rows > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/student_dashboard.css"> 
+    <link rel="stylesheet" href="../IKIGAI/assets/css/student_dashboard.css"> 
     <style>
         .flex-container {
     display: flex;
@@ -180,7 +175,7 @@ th {
                 Fee Balance:
             </h2>
             <!-- <h3>Kes 0.00</h3> -->
-            <h3>Will be updated...</h3>
+            <h3>Will be updated</h3>
         </div>
 
         <?php
