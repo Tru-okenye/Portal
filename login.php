@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once __DIR__ . 'https://ikigaicollege.ac.ke/Portal/config/config.php';
+include_once __DIR__ . '/config/config.php';
 
 if (isset($_POST['login'])) {
     $username = $_POST['username'];

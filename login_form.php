@@ -177,7 +177,7 @@ session_start();
     <div class="background-image"></div> <!-- Background Image with Blur and Brightness -->
   
     <div class="container">
-        <form class="login-form" method="POST" action="https://ikigaicollege.ac.ke/Portal/login.php">
+        <form class="login-form" method="POST" action="login.php">
             <!-- Logo above the heading -->
           
             <img src="assets/images/ikigai-college-logo-1.png" alt="Logo">
