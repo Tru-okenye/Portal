@@ -5,12 +5,13 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 // Fetch SMTP configuration
-$smtpConfig = include_once __DIR__ . '/../../config/smtp_config.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 // Verify SMTP configuration
-if (!$smtpConfig) {
-    die("SMTP configuration could not be loaded.");
-}
+// if (!$smtpConfig) {
+//     die("SMTP configuration could not be loaded.");
+// }
 
 // Fetch distinct courses
 $courseQuery = "SELECT DISTINCT CourseName FROM Students";
@@ -192,12 +193,12 @@ function sendEmail($recipient, $subject, $body, $students, $smtpConfig, $attachm
     try {
         // Server settings
         $mail->isSMTP();
-        $mail->Host = $smtpConfig['host']; 
+        $mail->Host = $_ENV['smtp_host']; 
         $mail->SMTPAuth = true;
-        $mail->Username = $smtpConfig['username']; 
-        $mail->Password = $smtpConfig['password']; 
-        $mail->SMTPSecure = $smtpConfig['encryption'];
-        $mail->Port = $smtpConfig['port'];
+        $mail->Username = $_ENV['smtp_username']; 
+        $mail->Password = $_ENV['smtp_password']; 
+        $mail->SMTPSecure = $_ENV['smtp_encryption'];
+        $mail->Port = $_ENV['smtp_port'];
 
         // Sender
         $mail->setFrom('okenyetru@gmail.com', 'Truphena Okenye');
