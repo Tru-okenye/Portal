@@ -4,7 +4,7 @@ include 'config/config.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['admin_username']) && !isset($_SESSION['student_admission_number'])) {
-    header('Location: login_form.php'); // Redirect to login page if not logged in
+    header('Location: https://ikigaicollege.ac.ke/Portal/login_form.php'); // Redirect to login page if not logged in
     exit();
 }
 
@@ -43,16 +43,16 @@ if (isset($_SESSION['admin_username'])) {
     <title>Dashboard</title>
 
     <!-- Common CSS -->
-    <link rel="stylesheet" href="assets/css/main.css"> 
-    <link rel="stylesheet" href="assets/css/header.css"> 
-    <link rel="stylesheet" href="assets/css/sidebar.css"> 
-    <link rel="stylesheet" href="assets/css/footer.css"> 
-    <link rel="stylesheet" href="assets/css/student_list.css">
+    <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/main.css"> 
+    <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/header.css"> 
+    <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/sidebar.css"> 
+    <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/footer.css"> 
+    <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/student_list.css">
 
     <!-- FontAwesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Header -->
-    <?php include 'includes/header.php'; ?>
+    <?php include 'https://ikigaicollege.ac.ke/Portal/includes/header.php'; ?>
     
 </head>
 <body>
@@ -61,11 +61,11 @@ if (isset($_SESSION['admin_username'])) {
     
     <?php 
     if ($role == 'admin') {
-        include 'includes/sidebar.php'; // Sidebar for admin
+        include 'https://ikigaicollege.ac.ke/Portal/includes/sidebar.php'; // Sidebar for admin
     } elseif ($role == 'teacher') {
-        include 'includes/sidebar_teacher.php'; // Sidebar for teacher
+        include 'https://ikigaicollege.ac.ke/Portal/includes/sidebar_teacher.php'; // Sidebar for teacher
     } else {
-        include 'includes/sidebar_student.php'; // Default to student sidebar
+        include 'https://ikigaicollege.ac.ke/Portal/includes/sidebar_student.php'; // Default to student sidebar
     }
     ?>
 
@@ -90,6 +90,6 @@ if (isset($_SESSION['admin_username'])) {
     </div>
 
     <!-- Footer -->
-    <!-- <?php include 'includes/footer.php'; ?> -->
+    <!-- <?php include 'https://ikigaicollege.ac.ke/Portal/includes/footer.php'; ?> -->
 </body>
 </html>
