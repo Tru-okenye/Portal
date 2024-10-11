@@ -193,7 +193,7 @@ session_start();
                 
                 <input type="submit" name="login" value="Login">
                 
-                <p><a href="forgot_password.php">Forgot Password?</a></p>
+                <p><a href="https://ikigaicollege.ac.ke/Portal/forgot_password.php">Forgot Password?</a></p>
 
             </div>
         </form>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'config/config.php';
+include 'https://ikigaicollege.ac.ke/Portal/config/config.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['admin_username']) && !isset($_SESSION['student_admission_number'])) {
