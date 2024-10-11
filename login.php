@@ -24,7 +24,9 @@ if (isset($_POST['login'])) {
         if (password_verify($password, $user['Password'])) {
             $_SESSION['role'] = $user['Role'];
             $_SESSION['admin_username'] = $user['Username']; // Unique variable for admin
-            header("Location: https://ikigaicollege.ac.ke/Portal/index.php");
+            // header("Location: https://ikigaicollege.ac.ke/Portal/index.php");
+            echo '<meta http-equiv="refresh" content="2;url= https://ikigaicollege.ac.ke/Portal/index.php">';
+
             exit();
         } else {
             echo "Invalid password!";
@@ -52,7 +54,9 @@ if (isset($_POST['login'])) {
                 if (password_verify($password, $student['password'])) {
                     $_SESSION['role'] = 'student';
                     $_SESSION['student_admission_number'] = $student['AdmissionNumber']; // Unique variable for student
-                    header("Location: https://ikigaicollege.ac.ke/Portal/index.php");
+                    // header("Location: https://ikigaicollege.ac.ke/Portal/index.php");
+                    echo '<meta http-equiv="refresh" content="2;url= https://ikigaicollege.ac.ke/Portal/index.php">';
+
                     exit();
                 } else {
                     echo "Invalid password!";
@@ -62,7 +66,9 @@ if (isset($_POST['login'])) {
                 if ($password === $student['Phone']) {
                     $_SESSION['role'] = 'student';
                     $_SESSION['student_admission_number'] = $student['AdmissionNumber']; // Unique variable for student
-                    header("Location: https://ikigaicollege.ac.ke/Portal/index.php");
+                    // header("Location: https://ikigaicollege.ac.ke/Portal/index.php");
+                    echo '<meta http-equiv="refresh" content="2;url=https://ikigaicollege.ac.ke/Portal/index.php?page=admission/confirmation">';
+
                     exit();
                 } else {
                     echo "Invalid password!";
