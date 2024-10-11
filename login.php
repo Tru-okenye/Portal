@@ -12,7 +12,7 @@ if (isset($_POST['login'])) {
     $password = $_POST['password'];
 
     // Check if the user is an admin or teacher
-    $sql = "SELECT * FROM Users WHERE Username = ?";
+    $sql = "SELECT * FROM users WHERE Username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $stmt->execute();
