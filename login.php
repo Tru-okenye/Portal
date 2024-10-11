@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once __DIR__ . '/config/config.php';
+include_once 'config/config.php';
 
 if (isset($_POST['login'])) {
     $username = $_POST['username'];
