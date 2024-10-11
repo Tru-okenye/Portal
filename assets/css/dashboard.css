@@ -1,0 +1,93 @@
+.main-container {
+    width: 100%;
+    max-width: 1200px; /* Centered content area */
+    margin: 0 auto;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    background-color: #3B2314; /* Dark color for cards */
+    color: #fff; /* Accent color for text */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    flex: 1; /* Equal width cards */
+    margin: 0 10px; /* Spacing between cards */
+    transition: transform 0.2s; /* Smooth hover effect */
+}
+
+.stat-card:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.stat-card h2 {
+    margin: 0;
+    font-size: 36px;
+}
+
+.stat-card p {
+    margin: 10px 0 0;
+    font-size: 18px;
+}
+
+.chart-container {
+    margin-bottom: 40px; /* Spacing between charts */
+    padding: 20px;
+    background-color: white; /* White background for charts */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+    color: #3B2314; /* Dark title color */
+    margin-bottom: 20px;
+}
+
+canvas {
+    width: 100% !important; /* Responsive */
+    height: 400px !important; /* Fixed height */
+}
+
+.add-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #E39825; /* Accent color */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s; /* Smooth color change */
+}
+
+.add-button:hover {
+    background-color: #d98f1f; /* Darker shade on hover */
+}
+
+#calendar {
+    max-width: 100%; /* Full width */
+    margin: 20px auto; /* Centered */
+}
+
+#calendar .fc {
+    background-color: white; /* Calendar background */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Media query to hide chart containers on small and medium screens */
+@media (max-width: 768px) { /* Adjust the max-width as necessary for your specific breakpoints */
+    .chart-container {
+        display: none; /* Hides the chart containers */
+    }
+}

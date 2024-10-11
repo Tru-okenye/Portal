@@ -1,0 +1,63 @@
+
+  
+form h2 {
+    color: #E39825;
+}
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+h3 {
+    margin-top: 20px;
+    color: #E39825;
+}
+.unit {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.unit h4 {
+    margin: 0;
+    color: #3B2314;
+}
+.unit p {
+    margin: 5px 0;
+}
+hr {
+    margin: 20px 0;
+}
+.no-units {
+    color: #e74c3c;
+}
+
+       .add-course-btn {
+        background-color: #E39825;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 16px;
+    }
+    .add-course-btn:hover {
+        background-color: #d08321;
+    }

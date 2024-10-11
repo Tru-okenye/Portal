@@ -1,0 +1,182 @@
+ /* Basic styles for sidebar */
+ .sidebar {
+    height: 90%;
+    width: 250px; /* Adjust width as needed */
+    position: fixed;
+  
+    left: 0;
+    background-color: #333;
+    color: #fff;
+    overflow-x: hidden;
+    overflow-y: auto;
+    transition: width 0.3s ease; 
+    z-index: 1; /* Lower z-index to keep it behind the header */
+}
+
+/* Close the sidebar halfway */
+.sidebar.close {
+    width: 80px; /* Reduced width when closed to show only icons */
+}
+
+/* Hide text when sidebar is closed */
+.sidebar.close .dropdown-btn span,
+.sidebar.close .dashboard-btn span,
+.sidebar.close h2 {
+    display: none;
+}
+
+/* Hide close icon and show hamburger menu icon when sidebar is closed */
+.sidebar.close .toggle-btn i.fa-x {
+    display: none;
+}
+
+.sidebar.close .toggle-btn i.fa-bars {
+    display: block;
+}
+
+/* Show close icon and hide hamburger menu icon when sidebar is open */
+.sidebar .toggle-btn i.fa-x {
+    display: block;
+}
+
+.sidebar .toggle-btn i.fa-bars {
+    display: none;
+}
+
+
+.toggle-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px; /* Placed at the top right of the sidebar */
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.sidebar .sidebar-content {
+    padding: 20px;
+}
+
+.sidebar h2 {
+    font-size: 20px;
+    margin-top: 0;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+}
+
+.sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.sidebar ul li a:hover {
+    background-color: #575757;
+}
+
+.dropdown-menu {
+    display: none;
+    padding-left: 20px;
+}
+
+.dropdown-menu.show {
+    display: block;
+    margin-left: 16px;
+}
+
+/* Custom scrollbar track */
+.sidebar::-webkit-scrollbar {
+    width: 8px; /* Adjust width for visibility */
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #333; /* Same as sidebar background */
+}
+
+/* Custom scrollbar handle */
+.sidebar::-webkit-scrollbar-thumb {
+    background: #555; /* Adjust color as needed */
+    border-radius: 10px; /* Rounded corners */
+}
+
+/* Custom scrollbar handle on hover */
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #777; /* Change color on hover */
+}
+
+/* For Firefox */
+.sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: #555 #333; /* Handle and track colors */
+}
+
+/* Style for dropdown buttons */
+.dropdown-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    text-align: left;
+    width: calc(100% - 10px); /* Adjust to make room for the arrow */
+    cursor: pointer;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    text-align: left;
+    width: calc(80% - 20px); 
+    cursor: pointer;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dropdown-btn:hover {
+    background-color: #575757;
+}
+
+.dropdown-btn i.fa-chevron-right,
+.dashboard-btn i.fa-chevron-right {
+    transition: transform 0.3s ease;
+    font-size: 12px; /* Make the arrow smaller */
+}
+
+.dropdown-btn i.fa-chevron-right.fa-rotate-180,
+.dashboard-btn i.fa-chevron-right.fa-rotate-180 {
+    transform: rotate(90deg); /* Rotate right chevron to point up */
+}
+
+/* Hide chevron icons when sidebar is closed */
+.sidebar.close .dropdown-btn i.fa-chevron-right,
+.sidebar.close .dashboard-btn i.fa-chevron-right {
+    display: none;
+}
+
+
+
+
+/* Adjust margin when sidebar is closed */
+.sidebar.close + .main-content {
+    margin-left: 80px; /* Adjust based on reduced sidebar width */
+}

@@ -1,0 +1,14 @@
+.footer {
+    background-color: #f4f4f4;
+    padding: 10px;
+    text-align: center;
+    position: relative; /* Change to relative */
+    width: 100%;
+    z-index: 10000; /* Higher z-index to keep it above other content */
+}
+
+.footer-content p {
+    margin: 0;
+    font-size: 14px; 
+    color: #333;
+}

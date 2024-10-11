@@ -1,0 +1,57 @@
+form h2, h3 {
+    color: #E39825;
+}
+
+label {
+    margin-right: 5px;
+    color: #3B2314;
+    font-weight: bold;
+}
+
+select, button {
+    width: 15%;
+    padding: 8px;
+    margin-top: 15px;
+    border: 1px solid;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #fff;
+}
+
+select {
+ 
+ color: black; 
+}
+
+.button {
+    background-color: #3B2314;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 6px;
+    width: 12%;
+    padding: 6px;
+    border-radius: 10px;
+}
+
+.button:hover {
+    background-color: #E39825;
+    color: #3B2314;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+} 
+
+table, th {
+    border: 1px solid #3B2314;
+}
+
+th {
+    padding: 12px;
+    text-align: left;
+    background-color: #E39825;
+    color: white;
+}
