@@ -67,7 +67,7 @@ if (isset($_POST['login'])) {
                     $_SESSION['role'] = 'student';
                     $_SESSION['student_admission_number'] = $student['AdmissionNumber']; // Unique variable for student
                     // header("Location: https://ikigaicollege.ac.ke/Portal/index.php");
-                    echo '<meta http-equiv="refresh" content="2;url=https://ikigaicollege.ac.ke/Portal/index.php?page=admission/confirmation">';
+                    echo '<meta http-equiv="refresh" content="2;url=https://ikigaicollege.ac.ke/Portal/index.php">';
 
                     exit();
                 } else {
