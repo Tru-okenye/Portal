@@ -31,7 +31,7 @@ if (isset($_POST['login'])) {
         }
     } else {
         // Check if the user is a student (login with admission number)
-        $sql = "SELECT * FROM Students WHERE AdmissionNumber = ?";
+        $sql = "SELECT * FROM students WHERE AdmissionNumber = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $username);
         $stmt->execute();

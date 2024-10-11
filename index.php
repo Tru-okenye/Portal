@@ -13,7 +13,7 @@ if (isset($_SESSION['admin_username'])) {
     $username = $_SESSION['admin_username'];
     
     // Fetch user role from the database
-    $sql = "SELECT Role FROM Users WHERE Username = ?";
+    $sql = "SELECT Role FROM users WHERE Username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $stmt->execute();
