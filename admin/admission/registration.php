@@ -25,7 +25,7 @@ $modesOfStudy = $conn->query("SELECT ModeID, ModeName FROM modeofstudy");
     <!-- Personal Information -->
     <fieldset>
         <legend>Personal Information</legend>
-        <!-- Personal Information Fields -->
+        
         <label for="admissionNumber">Admission Number:</label>
         <input type="text" id="admissionNumber" name="admissionNumber" required><br>
         
@@ -54,6 +54,7 @@ $modesOfStudy = $conn->query("SELECT ModeID, ModeName FROM modeofstudy");
         <label for="parentPhone">Parent's Phone:</label>
         <input type="text" id="parentPhone" name="parentPhone" required><br>
 
+        
         <label for="applicationForm">Upload Application Form:</label>
         <input type="file" id="applicationForm" name="applicationForm"><br>
         
@@ -68,7 +69,7 @@ $modesOfStudy = $conn->query("SELECT ModeID, ModeName FROM modeofstudy");
         <select id="category" name="category" required onchange="fetchCourses(this.value)">
             <option value="">Select Category</option>
             <?php foreach ($categories as $row) { ?>
-                <option value="<?php echo $row['CategoryID']; ?>"><?php echo $row['CategoryName']; ?></option>
+                <option value="<?php echo $row['CategoryName']; ?>"><?php echo $row['CategoryName']; ?></option>
             <?php } ?>
         </select><br>
         
@@ -101,44 +102,39 @@ $modesOfStudy = $conn->query("SELECT ModeID, ModeName FROM modeofstudy");
 </form>
 
 <script>
-async function fetchCourses(categoryId) {
-    console.log("fetchCourses called with categoryId:", categoryId); 
-    if (categoryId) {
-        try {
-            const response = await fetch('admin/admission/fetch_courses.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    categoryId: categoryId,
-                }),
-            });
+function fetchCourses(category) {
+    console.log("fetchCourses called with category:", category); 
+    if (category) {
+        var xhr = new XMLHttpRequest();
+        // xhr.open("GET", "../IKIGAI/admin/admission/fetch_courses.php?category=" + encodeURIComponent(category), true);
+        xhr.open("GET", "admin/admission/fetch_courses.php?category=" + encodeURIComponent(category), true);
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var courses = JSON.parse(xhr.responseText);
+                console.log("Fetched courses:", courses); // Debug line
+                var courseDropdown = document.getElementById('courseDropdown');
+                courseDropdown.innerHTML = '<option value="">Select Course</option>'; // Reset the dropdown
+
+                courses.forEach(function(course) {
+                    var option = document.createElement('option');
+                    option.value = course.CourseName;
+                    option.textContent = course.CourseName;
+                    courseDropdown.appendChild(option);
+                });
+            } else {
+                console.error('Error fetching courses:', xhr.statusText);
             }
-
-            const courses = await response.json();
-            console.log("Fetched courses:", courses); // Debug line
-            const courseDropdown = document.getElementById('courseDropdown');
-            courseDropdown.innerHTML = '<option value="">Select Course</option>'; // Reset the dropdown
-
-            courses.forEach(course => {
-                const option = document.createElement('option');
-                option.value = course.CourseName; // Update as per your column names
-                option.textContent = course.CourseName; // Update as per your column names
-                courseDropdown.appendChild(option);
-            });
-        } catch (error) {
-            console.error('Error fetching courses:', error);
-        }
+        };
+        xhr.onerror = function() {
+            console.error('Request failed');
+        };
+        xhr.send();
     } else {
         document.getElementById('courseDropdown').innerHTML = '<option value="">Select Course</option>'; // Reset the dropdown
     }
 }
 </script>
-
 
 <style>
    /* Heading */
