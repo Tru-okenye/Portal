@@ -1,11 +1,15 @@
 <?php
-// Include the database connection file
-include_once '../../config/config.php'; 
 
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+// Include the database connection file
+header("Access-Control-Allow-Origin: *");
+
+include_once '../../config/config.php'; 
+
+
 
 // Set the content type header for JSON response
 header('Content-Type: application/json');
@@ -19,6 +23,9 @@ $result = $conn->query("SELECT CourseName FROM courses WHERE CategoryID = (SELEC
 if (!$result) {
     // Return error message as JSON
     echo json_encode(['error' => 'Query error: ' . $conn->error]);
+    exit();
+} elseif ($result->num_rows === 0) {
+    echo json_encode([]);
     exit();
 }
 
