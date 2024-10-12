@@ -7,7 +7,7 @@ $searchCourse = isset($_POST['course']) ? $_POST['course'] : '';
 $searchSemester = isset($_POST['semester']) ? $_POST['semester'] : '';
 
 // Fetch distinct categories
-$catSql = "SELECT * FROM Categories";
+$catSql = "SELECT * FROM categories";
 $catResult = $conn->query($catSql);
 $categories = [];
 if ($catResult->num_rows > 0) {
@@ -19,7 +19,7 @@ if ($catResult->num_rows > 0) {
 // Fetch courses based on selected category
 $courses = [];
 if ($searchCategory) {
-    $courseSql = "SELECT * FROM Courses WHERE CategoryID = ?";
+    $courseSql = "SELECT * FROM courses WHERE CategoryID = ?";
     $courseStmt = $conn->prepare($courseSql);
     $courseStmt->bind_param("i", $searchCategory);
     $courseStmt->execute();
@@ -34,7 +34,7 @@ if ($searchCategory) {
 // Fetch distinct semesters based on selected course
 $semesters = [];
 if ($searchCourse) {
-    $semesterSql = "SELECT DISTINCT SemesterNumber FROM Units WHERE CourseID = (SELECT CourseID FROM Courses WHERE CourseName = ?)";
+    $semesterSql = "SELECT DISTINCT SemesterNumber FROM units WHERE CourseID = (SELECT CourseID FROM courses WHERE CourseName = ?)";
     $semesterStmt = $conn->prepare($semesterSql);
     $semesterStmt->bind_param("s", $searchCourse);
     $semesterStmt->execute();
@@ -49,7 +49,7 @@ if ($searchCourse) {
 // Fetch units based on selected course and semester
 $units = [];
 if ($searchCourse && $searchSemester) {
-    $unitSql = "SELECT UnitCode, UnitName, CourseContent, reference_materials FROM Units WHERE CourseID = (SELECT CourseID FROM Courses WHERE CourseName = ?) AND SemesterNumber = ?";
+    $unitSql = "SELECT UnitCode, UnitName, CourseContent, reference_materials FROM units WHERE CourseID = (SELECT CourseID FROM Courses WHERE CourseName = ?) AND SemesterNumber = ?";
     $unitStmt = $conn->prepare($unitSql);
     $unitStmt->bind_param("si", $searchCourse, $searchSemester);
     $unitStmt->execute();
@@ -70,7 +70,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Units</title>
-    <link rel="stylesheet" href="../IKIGAI/assets/css/courses.css"> 
+    <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/courses.css"> 
     <style>
         /* Add button styling */
         .add-course-btn {
