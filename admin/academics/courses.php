@@ -87,30 +87,66 @@ $conn->close();
     <title>View Units</title>
     <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/courses.css"> 
     <style>
-        /* Add button styling */
+    /* Add button styling */
+    .add-course-btn {
+        background-color: #E39825;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        position: fixed; /* Changed to fixed for consistent positioning */
+        top: 20px; /* Adjusted top position for better visibility */
+        right: 20px;
+        font-size: 16px;
+        text-decoration: none;
+        transition: background-color 0.3s ease; /* Added transition for smooth hover effect */
+    }
+
+    .add-course-btn:hover {
+        background-color: #d08321;
+    }
+
+    .delete-unit {
+        padding: 5px 10px; /* Added horizontal padding for better click area */
+        border: none;
+        border-radius: 5px; /* Added border-radius for consistency */
+        background-color: #ff4d4d; /* Added background color for visibility */
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s ease; /* Added transition for smooth hover effect */
+    }
+
+    .delete-unit:hover {
+        background-color: #e60000; /* Darker shade on hover */
+    }
+
+    /* Media Queries for Responsive Design */
+    @media (max-width: 768px) {
         .add-course-btn {
-            background-color: #E39825;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            position: absolute;
-            top: 80px;
-            margin-bottom: 8px;
-            right: 20px;
-            font-size: 16px;
-            text-decoration: none;
+            padding: 8px 16px; /* Slightly smaller padding on medium screens */
+            font-size: 14px; /* Smaller font size on medium screens */
         }
-        .add-course-btn:hover {
-            background-color: #d08321;
+
+        .delete-unit {
+            padding: 4px 8px; /* Smaller padding for delete button */
         }
-        .delete-unit{
-            padding: 2px;
-            border: none;
+    }
+
+    @media (max-width: 480px) {
+        .add-course-btn {
+            padding: 6px 12px; /* Further reduced padding on small screens */
+            font-size: 12px; /* Smaller font size on small screens */
+            right: 10px; /* Adjusted right position for small screens */
+            top: 10px; /* Adjusted top position for small screens */
         }
-        
-    </style>
+
+        .delete-unit {
+            padding: 3px 6px; /* Smaller padding for delete button */
+        }
+    }
+</style>
+
 </head>
 <body>
     
