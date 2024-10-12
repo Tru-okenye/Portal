@@ -1,5 +1,7 @@
 <?php
 include_once __DIR__ . '/../../config/config.php';
+
+// Initialize variables
 $categories = [];
 $courses = [];
 
@@ -9,6 +11,24 @@ $catResult = $conn->query($catSql);
 if ($catResult->num_rows > 0) {
     while ($row = $catResult->fetch_assoc()) {
         $categories[] = $row;
+    }
+}
+
+// Handle form submission for fetching courses based on selected category
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['category'])) {
+    $selectedCategoryID = $_POST['category'];
+
+    // Fetch courses based on selected category
+    $courseSql = "SELECT * FROM courses WHERE CategoryID = ?";
+    $courseStmt = $conn->prepare($courseSql);
+    $courseStmt->bind_param("i", $selectedCategoryID);
+    $courseStmt->execute();
+    $courseResult = $courseStmt->get_result();
+
+    if ($courseResult->num_rows > 0) {
+        while ($row = $courseResult->fetch_assoc()) {
+            $courses[] = $row;
+        }
     }
 }
 
@@ -54,7 +74,6 @@ $modesOfStudy = $conn->query("SELECT ModeID, ModeName FROM modeofstudy");
         <label for="parentPhone">Parent's Phone:</label>
         <input type="text" id="parentPhone" name="parentPhone" required><br>
 
-        
         <label for="applicationForm">Upload Application Form:</label>
         <input type="file" id="applicationForm" name="applicationForm"><br>
         
@@ -66,23 +85,30 @@ $modesOfStudy = $conn->query("SELECT ModeID, ModeName FROM modeofstudy");
         <legend>Education Details</legend>
         
         <label for="category">Category:</label>
-        <select id="category" name="category" required onchange="fetchCourses(this.value)">
+        <select id="category" name="category" required onchange="this.form.submit()">
             <option value="">Select Category</option>
             <?php foreach ($categories as $row) { ?>
-                <option value="<?php echo $row['CategoryName']; ?>"><?php echo $row['CategoryName']; ?></option>
+                <option value="<?php echo $row['CategoryID']; ?>" <?php echo (isset($selectedCategoryID) && $selectedCategoryID == $row['CategoryID']) ? 'selected' : ''; ?>>
+                    <?php echo htmlspecialchars($row['CategoryName']); ?>
+                </option>
             <?php } ?>
         </select><br>
         
         <label for="course">Course:</label>
         <select id="courseDropdown" name="course" required>
             <option value="">Select Course</option>
+            <?php foreach ($courses as $course) { ?>
+                <option value="<?php echo htmlspecialchars($course['CourseName']); ?>">
+                    <?php echo htmlspecialchars($course['CourseName']); ?>
+                </option>
+            <?php } ?>
         </select><br>
         
         <label for="intake">Intake:</label>
         <select id="intake" name="intake" required>
             <option value="">Select Intake</option>
             <?php while ($row = $intakes->fetch_assoc()) { ?>
-                <option value="<?php echo $row['IntakeName']; ?>"><?php echo $row['IntakeName']; ?></option>
+                <option value="<?php echo htmlspecialchars($row['IntakeName']); ?>"><?php echo htmlspecialchars($row['IntakeName']); ?></option>
             <?php } ?>
         </select><br>
         
@@ -93,7 +119,7 @@ $modesOfStudy = $conn->query("SELECT ModeID, ModeName FROM modeofstudy");
         <select id="modeOfStudy" name="modeOfStudy" required>
             <option value="">Select Mode of Study</option>
             <?php while ($row = $modesOfStudy->fetch_assoc()) { ?>
-                <option value="<?php echo $row['ModeID']; ?>"><?php echo $row['ModeName']; ?></option>
+                <option value="<?php echo htmlspecialchars($row['ModeID']); ?>"><?php echo htmlspecialchars($row['ModeName']); ?></option>
             <?php } ?>
         </select><br>
 
@@ -101,40 +127,6 @@ $modesOfStudy = $conn->query("SELECT ModeID, ModeName FROM modeofstudy");
     </fieldset>
 </form>
 
-<script>
-function fetchCourses(category) {
-    console.log("fetchCourses called with category:", category); 
-    if (category) {
-        var xhr = new XMLHttpRequest();
-        // xhr.open("GET", "../IKIGAI/admin/admission/fetch_courses.php?category=" + encodeURIComponent(category), true);
-        xhr.open("GET", "https://ikigaicollege.ac.ke/Portal/admin/admission/fetch_courses.php?category=" + encodeURIComponent(category), true);
-
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                var courses = JSON.parse(xhr.responseText);
-                console.log("Fetched courses:", courses); // Debug line
-                var courseDropdown = document.getElementById('courseDropdown');
-                courseDropdown.innerHTML = '<option value="">Select Course</option>'; // Reset the dropdown
-
-                courses.forEach(function(course) {
-                    var option = document.createElement('option');
-                    option.value = course.CourseName;
-                    option.textContent = course.CourseName;
-                    courseDropdown.appendChild(option);
-                });
-            } else {
-                console.error('Error fetching courses:', xhr.statusText);
-            }
-        };
-        xhr.onerror = function() {
-            console.error('Request failed');
-        };
-        xhr.send();
-    } else {
-        document.getElementById('courseDropdown').innerHTML = '<option value="">Select Course</option>'; // Reset the dropdown
-    }
-}
-</script>
 
 <style>
    /* Heading */
