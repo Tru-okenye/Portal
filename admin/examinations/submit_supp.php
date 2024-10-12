@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             // Fetch category name and unit name based on IDs
-            $categorySql = "SELECT CategoryName FROM Categories WHERE CategoryID = ?";
+            $categorySql = "SELECT CategoryName FROM categories WHERE CategoryID = ?";
             if ($categoryStmt = $conn->prepare($categorySql)) {
                 $categoryStmt->bind_param("i", $categoryId);
                 $categoryStmt->execute();
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $categoryStmt->close();
             }
 
-            $unitSql = "SELECT UnitName FROM Units WHERE UnitCode = ?";
+            $unitSql = "SELECT UnitName FROM units WHERE UnitCode = ?";
             if ($unitStmt = $conn->prepare($unitSql)) {
                 $unitStmt->bind_param("s", $unitCode);
                 $unitStmt->execute();
