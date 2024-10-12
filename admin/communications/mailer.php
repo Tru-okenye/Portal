@@ -203,6 +203,11 @@ function sendEmail($recipient, $subject, $body, $students, $smtpConfig, $attachm
         // Sender
         $mail->setFrom('ikigaicollegeke@gmail.com', 'IKIGAI COLLEGE OF INTERIOR DESIGN');
 
+        // Check if there is an attachment and add it to the email
+        if ($attachment && $attachment['error'] == UPLOAD_ERR_OK) {
+            $mail->addAttachment($attachment['tmp_name'], $attachment['name']);
+        }
+
         // Recipients
         if ($recipient === 'all') {
             foreach ($students as $student) {
@@ -245,6 +250,7 @@ function sendEmail($recipient, $subject, $body, $students, $smtpConfig, $attachm
         echo "Email could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
 }
+
 
 
 $conn->close();
