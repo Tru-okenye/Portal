@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $applicationFormPath = uploadFile('applicationForm');
 
     // Prepared statement to insert data into the Students table
-    $stmt = $conn->prepare("INSERT INTO Students 
+    $stmt = $conn->prepare("INSERT INTO students 
             (AdmissionNumber, IDNumber, FirstName, LastName, Email, Phone, Gender, 
             ParentPhone, CategoryName, CourseName, IntakeName, Grade, 
             ModeOfStudy, ApplicationFormPath) 
