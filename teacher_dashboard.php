@@ -75,7 +75,6 @@ $conn->close();
 
 </head>
 <body>
-    <button class="add-button" onclick="location.href='index.php?page=admission/registration'">+</button>
 
     <div class="main-container">
         <!-- Stats Cards Section -->
