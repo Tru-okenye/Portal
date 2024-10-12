@@ -14,7 +14,7 @@ $dotenv->load();
 // }
 
 // Fetch distinct courses
-$courseQuery = "SELECT DISTINCT CourseName FROM Students";
+$courseQuery = "SELECT DISTINCT CourseName FROM students";
 $courseResult = $conn->query($courseQuery);
 
 $courses = [];
@@ -25,7 +25,7 @@ if ($courseResult->num_rows > 0) {
 }
 
 // Fetch distinct intakes
-$intakeQuery = "SELECT DISTINCT IntakeName FROM Students";
+$intakeQuery = "SELECT DISTINCT IntakeName FROM students";
 $intakeResult = $conn->query($intakeQuery);
 
 $intakes = [];
@@ -36,7 +36,7 @@ if ($intakeResult->num_rows > 0) {
 }
 
 // Fetch all students
-$sql = "SELECT AdmissionNumber, FirstName, LastName, Email FROM Students";
+$sql = "SELECT AdmissionNumber, FirstName, LastName, Email FROM students";
 $result = $conn->query($sql);
 
 $students = [];
@@ -162,7 +162,7 @@ if (isset($_POST['sendEmail'])) {
     $selectedIntake = $_POST['intake'];
 
     // Modify query based on filters
-    $query = "SELECT AdmissionNumber, FirstName, LastName, Email FROM Students WHERE 1=1";
+    $query = "SELECT AdmissionNumber, FirstName, LastName, Email FROM students WHERE 1=1";
     
     if (!empty($selectedCourse)) {
         $query .= " AND CourseName = '" . $conn->real_escape_string($selectedCourse) . "'";
@@ -201,7 +201,7 @@ function sendEmail($recipient, $subject, $body, $students, $smtpConfig, $attachm
         $mail->Port = $_ENV['smtp_port'];
 
         // Sender
-        $mail->setFrom('okenyetru@gmail.com', 'Truphena Okenye');
+        $mail->setFrom('ikigaicollegeke@gmail.com', 'IKIGAI COLLEGE OF INTERIOR DESIGN');
 
         // Recipients
         if ($recipient === 'all') {

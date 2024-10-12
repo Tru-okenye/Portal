@@ -4,7 +4,7 @@
 
 <!-- FullCalendar CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/fullcalendar.min.css">
-<link rel="stylesheet" href="../IKIGAI/assets/css/calendar.css"> 
+<link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/calendar.css"> 
 
 <!-- FullCalendar JS -->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
         editable: true,
         selectable: true,
         events: function(fetchInfo, successCallback, failureCallback) {
-            fetch('../IKIGAI/admin/communications/load_events.php') // Adjusted path
+            fetch('https://ikigaicollege.ac.ke/Portal/admin/communications/load_events.php') // Adjusted path
                 .then(response => response.json())
                 .then(data => {
                     console.log('Fetched events:', data); // Debugging line
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
         dateClick: function(info) {
             var eventTitle = prompt('Enter Event Title:');
             if (eventTitle) {
-                fetch('../IKIGAI/admin/communications/save_event.php', { // Adjusted path
+                fetch('https://ikigaicollege.ac.ke/Portal/admin/communications/save_event.php', { // Adjusted path
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (action === 'edit') {
                 var newTitle = prompt('Edit Event Title:', info.event.title);
                 if (newTitle) {
-                    fetch('../IKIGAI/admin/communications/update_event.php', { // Adjusted path
+                    fetch('https://ikigaicollege.ac.ke/Portal/admin/communications/update_event.php', { // Adjusted path
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } else if (action === 'delete') {
                 if (confirm('Are you sure you want to delete this event?')) {
-                    fetch('../IKIGAI/admin/communications/delete_event.php', { // Adjusted path
+                    fetch('https://ikigaicollege.ac.ke/Portal/admin/communications/delete_event.php', { // Adjusted path
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
