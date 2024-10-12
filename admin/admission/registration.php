@@ -102,36 +102,41 @@ $modesOfStudy = $conn->query("SELECT ModeID, ModeName FROM modeofstudy");
 </form>
 
 <script>
-function fetchCourses(category) {
-    console.log("fetchCourses called with category:", category); 
+function fetchOptions(url, data) {
+    return fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams(data)
+    })
+    .then(response => response.json())
+    .catch(error => {
+        console.error('Error fetching options:', error);
+        return [];
+    });
+}
+
+function updateDropdown(selectId, options) {
+    const select = document.getElementById(selectId);
+    select.innerHTML = '<option value="">Select</option>';
+    options.forEach(option => {
+        select.innerHTML += `<option value="${option.value}">${option.text}</option>`;
+    });
+}
+
+function handleCategoryChange() {
+    const category = document.getElementById('category').value;
     if (category) {
-        var xhr = new XMLHttpRequest();
-        // xhr.open("GET", "../IKIGAI/admin/admission/fetch_courses.php?category=" + encodeURIComponent(category), true);
-        xhr.open("GET", "admin/admission/fetch_courses.php?category=" + encodeURIComponent(category), true);
-
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                var courses = JSON.parse(xhr.responseText);
-                console.log("Fetched courses:", courses); // Debug line
-                var courseDropdown = document.getElementById('courseDropdown');
-                courseDropdown.innerHTML = '<option value="">Select Course</option>'; // Reset the dropdown
-
-                courses.forEach(function(course) {
-                    var option = document.createElement('option');
-                    option.value = course.CourseName;
-                    option.textContent = course.CourseName;
-                    courseDropdown.appendChild(option);
-                });
-            } else {
-                console.error('Error fetching courses:', xhr.statusText);
-            }
-        };
-        xhr.onerror = function() {
-            console.error('Request failed');
-        };
-        xhr.send();
+        fetchOptions('admin/admission/fetch_courses.php', { category })
+            .then(data => {
+                const courses = data.map(course => ({ value: course.CourseName, text: course.CourseName }));
+                updateDropdown('course', courses);
+                document.getElementById('course').disabled = false;
+            });
     } else {
-        document.getElementById('courseDropdown').innerHTML = '<option value="">Select Course</option>'; // Reset the dropdown
+        document.getElementById('course').innerHTML = '<option value="">Select Course</option>';
+        document.getElementById('course').disabled = true;
     }
 }
 </script>
