@@ -114,7 +114,7 @@ function fetchCourses(category) {
         try {
             var courses = JSON.parse(xhr.responseText);
         } catch (e) {
-            console.error('Error parsing JSON:', e);
+            console.error('Error parsing JSON:', e, xhr.responseText);
             return;
         }
         var courseDropdown = document.getElementById('courseDropdown');
