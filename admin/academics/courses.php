@@ -137,9 +137,9 @@ $conn->close();
     @media (max-width: 480px) {
         .add-course-btn {
             padding: 6px 12px; /* Further reduced padding on small screens */
-            font-size: 12px; /* Smaller font size on small screens */
+            font-size: 15px; /* Smaller font size on small screens */
             right: 10px; /* Adjusted right position for small screens */
-            top: 80px; /* Adjusted top position for better visibility */
+            top: 100px; /* Adjusted top position for better visibility */
         margin-bottom: 5px;
         }
 
