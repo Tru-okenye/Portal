@@ -248,6 +248,7 @@ if (isset($_POST['category'], $_POST['course'], $_POST['intake'], $_POST['year']
 <style>
     form h2, h3 {
         color: #E39825;
+        text-align: center; /* Center align the headings */
     }
 
     label {
@@ -256,31 +257,32 @@ if (isset($_POST['category'], $_POST['course'], $_POST['intake'], $_POST['year']
         font-weight: bold;
     }
 
-    select, button {
-        width: 15%;
+    select, form button {
+        width: 100%; /* Full width on small screens */
         padding: 8px;
         margin-top: 15px;
         border: 1px solid;
         border-radius: 5px;
         font-size: 14px;
         color: #fff;
+        box-sizing: border-box; /* Include padding in width */
     }
 
     select {
-      
-      color: black; 
-  }
+        color: black; 
+    }
 
-    button {
+    form button {
         background-color: #3B2314;
         color: white;
         border: none;
         cursor: pointer;
         margin-top: 6px;
         border-radius: 10px;
+        padding: 10px; /* Increased padding for better touch targets */
     }
 
-    button:hover {
+    form button:hover {
         background-color: #E39825;
         color: #3B2314;
     }
@@ -301,7 +303,32 @@ if (isset($_POST['category'], $_POST['course'], $_POST['intake'], $_POST['year']
         background-color: #E39825;
         color: white;
     }
+
+    /* Responsive Styles */
+    @media screen and (min-width: 481px) and (max-width: 768px) {
+        select, form button {
+            width: 48%; /* Adjust width for medium screens */
+            display: inline-block; /* Display buttons and selects side by side */
+            margin-right: 4%; /* Space between elements */
+        }
+
+        form button {
+            margin-top: 0; /* Remove margin on button for better alignment */
+        }
+
+        /* Reset the right margin for the last button */
+        form button:last-of-type, select:last-of-type {
+            margin-right: 0;
+        }
+    }
+
+    @media screen and (min-width: 769px) {
+        select, form button {
+            width: 15%; /* Keep original width for large screens */
+        }
+    }
 </style>
+
 
 </head>
 <body>
