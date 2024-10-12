@@ -105,7 +105,7 @@ async function fetchCourses(categoryId) {
     console.log("fetchCourses called with categoryId:", categoryId); 
     if (categoryId) {
         try {
-            const response = await fetch('fetch_courses.php', {
+            const response = await fetch('admin/admission/fetch_courses.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
