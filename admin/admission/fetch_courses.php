@@ -18,14 +18,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute();
     $result = $stmt->get_result();
 
-    // Generate HTML options for the courses
-    $options = '<option value="">Select Course</option>'; // Default option
+    // Prepare an array for the courses
+    $courses = [];
     while ($row = $result->fetch_assoc()) {
-        $options .= '<option value="' . htmlspecialchars($row['CourseName']) . '">' . htmlspecialchars($row['CourseName']) . '</option>';
+        $courses[] = ['CourseName' => htmlspecialchars($row['CourseName'])];
     }
 
-    // Output the options
-    echo $options;
+    // Output the JSON encoded array
+    echo json_encode($courses);
 
     // Close the statement and connection
     $stmt->close();

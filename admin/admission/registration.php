@@ -130,15 +130,18 @@ function handleCategoryChange() {
     if (category) {
         fetchOptions('admin/admission/fetch_courses.php', { category })
             .then(data => {
+                // Update the dropdown based on the JSON response
                 const courses = data.map(course => ({ value: course.CourseName, text: course.CourseName }));
-                updateDropdown('course', courses);
-                document.getElementById('course').disabled = false;
+                updateDropdown('courseDropdown', courses); // Make sure to use the correct ID
+                document.getElementById('courseDropdown').disabled = false; // Enable the dropdown
             });
     } else {
-        document.getElementById('course').innerHTML = '<option value="">Select Course</option>';
-        document.getElementById('course').disabled = true;
+        // Reset dropdown if no category is selected
+        updateDropdown('courseDropdown', []); // Clear the dropdown
+        document.getElementById('courseDropdown').disabled = true; // Disable the dropdown
     }
 }
+
 </script>
 
 <style>
