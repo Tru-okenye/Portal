@@ -8,11 +8,6 @@ use PHPMailer\PHPMailer\Exception;
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-// Verify SMTP configuration
-// if (!$smtpConfig) {
-//     die("SMTP configuration could not be loaded.");
-// }
-
 // Fetch distinct courses
 $courseQuery = "SELECT DISTINCT CourseName FROM students";
 $courseResult = $conn->query($courseQuery);
@@ -45,9 +40,118 @@ if ($result->num_rows > 0) {
         $students[] = $row;
     }
 }
+
+// Initialize message variables
+$message = "";
+$messageClass = "";
+
+if (isset($_POST['sendEmail'])) {
+    $recipient = $_POST['recipient'];
+    $subject = $_POST['subject'];
+    $body = $_POST['body'];
+    $selectedCourse = $_POST['course'];
+    $selectedIntake = $_POST['intake'];
+
+    // Modify query based on filters
+    $query = "SELECT AdmissionNumber, FirstName, LastName, Email FROM students WHERE 1=1";
+    
+    if (!empty($selectedCourse)) {
+        $query .= " AND CourseName = '" . $conn->real_escape_string($selectedCourse) . "'";
+    }
+
+    if (!empty($selectedIntake)) {
+        $query .= " AND IntakeName = '" . $conn->real_escape_string($selectedIntake) . "'";
+    }
+
+    $result = $conn->query($query);
+    $filteredStudents = [];
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $filteredStudents[] = $row;
+        }
+    }
+
+    // Check if there's an attachment
+    $attachment = isset($_FILES['attachment']) ? $_FILES['attachment'] : null;
+
+    // Call the sendEmail function
+    $emailStatus = sendEmail($recipient, $subject, $body, $filteredStudents, $smtpConfig, $attachment);
+
+    if ($emailStatus === true) {
+        // Redirect to the same page with success message
+        header("Location: ".$_SERVER['PHP_SELF']."?status=success");
+        exit;
+    } else {
+        $message = "Email could not be sent. Mailer Error: " . $emailStatus;
+        $messageClass = "error";
+    }
+}
+
+// Handle success message
+if (isset($_GET['status']) && $_GET['status'] == 'success') {
+    $message = "Email sent successfully!";
+    $messageClass = "success";
+}
+
+function sendEmail($recipient, $subject, $body, $students, $smtpConfig, $attachment) {
+    $mail = new PHPMailer(true);
+
+    try {
+        // Server settings
+        $mail->isSMTP();
+        $mail->Host = $_ENV['smtp_host']; 
+        $mail->SMTPAuth = true;
+        $mail->Username = $_ENV['smtp_username']; 
+        $mail->Password = $_ENV['smtp_password']; 
+        $mail->SMTPSecure = $_ENV['smtp_encryption'];
+        $mail->Port = $_ENV['smtp_port'];
+
+        // Sender
+        $mail->setFrom('ikigaicollegeke@gmail.com', 'IKIGAI COLLEGE OF INTERIOR DESIGN');
+
+        // Check if there is an attachment and add it to the email
+        if ($attachment && $attachment['error'] == UPLOAD_ERR_OK) {
+            $mail->addAttachment($attachment['tmp_name'], $attachment['name']);
+        }
+
+        // Recipients
+        if ($recipient === 'all') {
+            foreach ($students as $student) {
+                $personalizedBody = "Dear " . $student['FirstName'] . " " . $student['LastName'] . ",\n\n" .
+                                    $body . "\n\nYour Admission Number is: " . $student['AdmissionNumber'];
+
+                $mail->addAddress($student['Email']);
+                
+                $mail->isHTML(true);
+                $mail->Subject = $subject;
+                $mail->Body    = nl2br(htmlspecialchars($personalizedBody)); // Convert new lines to <br> tags
+                $mail->AltBody = strip_tags($personalizedBody);
+
+                // Send email
+                $mail->send();
+                $mail->clearAddresses();
+            }
+        } else {
+            // Single student email
+            $mail->addAddress($recipient);
+            $mail->isHTML(true);
+            $mail->Subject = $subject;
+            $mail->Body    = nl2br(htmlspecialchars($body)); 
+            $mail->AltBody = strip_tags($body);
+            $mail->send();
+        }
+
+        return true;
+    } catch (Exception $e) {
+        return $mail->ErrorInfo;
+    }
+}
+
+$conn->close();
 ?>
+
 <style>
- <style>
+ 
     form h2, h3 {
         color: #E39825;
     }
@@ -106,7 +210,11 @@ if ($result->num_rows > 0) {
         color: white;
     }
 </style>
-</style>
+
+
+<?php if ($message): ?>
+        <p class="<?php echo $messageClass; ?>"><?php echo $message; ?></p>
+    <?php endif; ?>
 
 <!-- Email Form -->
 <form method="post" action="" enctype="multipart/form-data">
@@ -152,106 +260,3 @@ if ($result->num_rows > 0) {
 
     <button type="submit" name="sendEmail">Send Email</button>
 </form>
-
-<?php
-if (isset($_POST['sendEmail'])) {
-    $recipient = $_POST['recipient'];
-    $subject = $_POST['subject'];
-    $body = $_POST['body'];
-    $selectedCourse = $_POST['course'];
-    $selectedIntake = $_POST['intake'];
-
-    // Modify query based on filters
-    $query = "SELECT AdmissionNumber, FirstName, LastName, Email FROM students WHERE 1=1";
-    
-    if (!empty($selectedCourse)) {
-        $query .= " AND CourseName = '" . $conn->real_escape_string($selectedCourse) . "'";
-    }
-
-    if (!empty($selectedIntake)) {
-        $query .= " AND IntakeName = '" . $conn->real_escape_string($selectedIntake) . "'";
-    }
-
-    $result = $conn->query($query);
-    $filteredStudents = [];
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $filteredStudents[] = $row;
-        }
-    }
-
-    // Check if there's an attachment
-    $attachment = isset($_FILES['attachment']) ? $_FILES['attachment'] : null;
-
-    // Call the sendEmail function
-    sendEmail($recipient, $subject, $body, $filteredStudents, $smtpConfig, $attachment);
-}
-
-function sendEmail($recipient, $subject, $body, $students, $smtpConfig, $attachment) {
-    $mail = new PHPMailer(true);
-
-    try {
-        // Server settings
-        $mail->isSMTP();
-        $mail->Host = $_ENV['smtp_host']; 
-        $mail->SMTPAuth = true;
-        $mail->Username = $_ENV['smtp_username']; 
-        $mail->Password = $_ENV['smtp_password']; 
-        $mail->SMTPSecure = $_ENV['smtp_encryption'];
-        $mail->Port = $_ENV['smtp_port'];
-
-        // Sender
-        $mail->setFrom('ikigaicollegeke@gmail.com', 'IKIGAI COLLEGE OF INTERIOR DESIGN');
-
-        // Check if there is an attachment and add it to the email
-        if ($attachment && $attachment['error'] == UPLOAD_ERR_OK) {
-            $mail->addAttachment($attachment['tmp_name'], $attachment['name']);
-        }
-
-        // Recipients
-        if ($recipient === 'all') {
-            foreach ($students as $student) {
-                // Personalize the email body with the admission number
-                $personalizedBody = "Dear " . $student['FirstName'] . " " . $student['LastName'] . ",\n\n" .
-                                    $body . "\n\nYour Admission Number is: " . $student['AdmissionNumber'];
-
-                $mail->addAddress($student['Email']);
-                
-                // Set personalized content for each student
-                $mail->isHTML(true);
-                $mail->Subject = $subject;
-                $mail->Body    = nl2br(htmlspecialchars($personalizedBody)); // Convert new lines to <br> tags
-                $mail->AltBody = strip_tags($personalizedBody);
-
-                // Send email
-                $mail->send();
-                $mail->clearAddresses(); // Clear address for the next loop
-            }
-        } else {
-            // Personalize for a single student
-            $student = $students[0]; // Assuming the recipient corresponds to the first match in the filtered students array
-            $personalizedBody = "Dear " . $student['FirstName'] . " " . $student['LastName'] . ",\n\n" .
-                                $body . "\n\nYour Admission Number is: " . $student['AdmissionNumber'];
-
-            $mail->addAddress($recipient);
-
-            // Set content
-            $mail->isHTML(true);
-            $mail->Subject = $subject;
-            $mail->Body    = nl2br(htmlspecialchars($personalizedBody)); // Convert new lines to <br> tags
-            $mail->AltBody = strip_tags($personalizedBody);
-
-            // Send email
-            $mail->send();
-        }
-
-        echo "Email sent successfully!";
-    } catch (Exception $e) {
-        echo "Email could not be sent. Mailer Error: {$mail->ErrorInfo}";
-    }
-}
-
-
-
-$conn->close();
-?>
