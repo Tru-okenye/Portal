@@ -2,20 +2,20 @@
 include 'config/config.php';
 
 // Fetch total number of students
-$totalStudentsSql = "SELECT COUNT(*) AS TotalStudents FROM Students WHERE AdmissionNumber IS NOT NULL";
+$totalStudentsSql = "SELECT COUNT(*) AS TotalStudents FROM students WHERE AdmissionNumber IS NOT NULL";
 $totalStudentsResult = $conn->query($totalStudentsSql);
 $totalStudents = $totalStudentsResult->fetch_assoc()['TotalStudents'];
 
 // Fetch total number of courses
-$totalCoursesSql = "SELECT COUNT(*) AS TotalCourses FROM Courses";
+$totalCoursesSql = "SELECT COUNT(*) AS TotalCourses FROM courses";
 $totalCoursesResult = $conn->query($totalCoursesSql);
 $totalCourses = $totalCoursesResult->fetch_assoc()['TotalCourses'];
 
 // Fetch courses along with their categories
 $courseDataSql = "
     SELECT c.CourseName, ct.CategoryName
-    FROM Courses c
-    JOIN Categories ct ON c.CategoryID = ct.CategoryID
+    FROM courses c
+    JOIN categories ct ON c.CategoryID = ct.CategoryID
 ";
 $courseDataResult = $conn->query($courseDataSql);
 
@@ -45,7 +45,7 @@ foreach ($coursesForGraph as $category => $courses) {
     foreach ($courses as $course) {
         $studentCountSql = "
             SELECT COUNT(*) AS StudentCount 
-            FROM Students 
+            FROM students 
             WHERE AdmissionNumber IS NOT NULL AND CourseName = ?
         ";
         $stmt = $conn->prepare($studentCountSql);
@@ -68,8 +68,8 @@ $conn->close();
     <title>Enrollment Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/fullcalendar.min.css">
-    <link rel="stylesheet" href="../IKIGAI/assets/css/calendar.css"> 
-    <link rel="stylesheet" href="../IKIGAI/assets/css/dashboard.css"> 
+    <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/calendar.css"> 
+    <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/dashboard.css"> 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 
@@ -190,7 +190,7 @@ $conn->close();
                 editable: false,
                 selectable: false,
                 events: function(fetchInfo, successCallback, failureCallback) {
-                    fetch('../IKIGAI/admin/communications/load_events.php') // Adjusted path
+                    fetch('admin/communications/load_events.php') // Adjusted path
                         .then(response => response.json())
                         .then(data => {
                             console.log('Fetched events:', data); // Debugging line

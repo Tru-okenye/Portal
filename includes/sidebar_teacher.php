@@ -3,16 +3,23 @@
     height: 90%;
     width: 250px; /* Adjust width as needed */
     position: fixed;
-  
+    
     left: 0;
     background-color: #cf881d;
     color: #fff;
     overflow-x: hidden;
     overflow-y: auto;
     transition: width 0.3s ease; 
-    z-index: 1; /* Lower z-index to keep it behind the header */
+    z-index: 10; /* Lower z-index to keep it behind the header */
+    
 }
 
+.main-content {
+    position: relative;
+    margin-left: 250px; /* Space for the sidebar when open */
+    z-index: 1; /* Lower z-index to be behind the sidebar */
+    transition: margin-left 0.3s ease;
+}
 /* Close the sidebar halfway */
 .sidebar.close {
     width: 80px; /* Reduced width when closed to show only icons */
@@ -61,10 +68,12 @@
 
 .sidebar h2 {
     font-size: 20px;
+    color: #fff;
     margin-top: 0;
-    color: #3B2314;
 }
-
+.sidebar-content h2{
+    color: rgb(107, 43, 43);
+}
 .sidebar ul {
     list-style: none;
     padding: 0;
@@ -77,6 +86,8 @@
     background-color: rgb(79, 33, 33);
 
 }
+
+
 .sidebar ul li a {
     color: #fff;
     text-decoration: none;
@@ -85,10 +96,20 @@
     border-radius: 4px;
 }
 
+/* Highlight the active page */
+.active-page {
+    background-color: #3B2314; /* Background color for active page */
+    color: #fff; /* Ensure text is readable */
+}
+
+.active-page:hover {
+    background-color: #3B2314; /* Keep the background color the same on hover */
+}
+
+
 .sidebar ul li a:hover {
     background-color: rgb(79, 33, 33);
 }
-
 
 .dropdown-menu {
     display: none;
@@ -106,24 +127,24 @@
 }
 
 .sidebar::-webkit-scrollbar-track {
-    background: #333; /* Same as sidebar background */
+    background: #a27634; /* Same as sidebar background */
 }
 
 /* Custom scrollbar handle */
 .sidebar::-webkit-scrollbar-thumb {
-    background: #555; /* Adjust color as needed */
+    background: #a27634; /* Adjust color as needed */
     border-radius: 10px; /* Rounded corners */
 }
 
 /* Custom scrollbar handle on hover */
 .sidebar::-webkit-scrollbar-thumb:hover {
-    background: #777; /* Change color on hover */
+    background: #a27634; /* Change color on hover */
 }
 
 /* For Firefox */
 .sidebar {
     scrollbar-width: thin;
-    scrollbar-color: #555 #333; /* Handle and track colors */
+    scrollbar-color: #a27634; /* Handle and track colors */
 }
 
 /* Style for dropdown buttons */
@@ -181,10 +202,43 @@
 
 
 
-/* Adjust margin when sidebar is closed */
 .sidebar.close + .main-content {
     margin-left: 80px; /* Adjust based on reduced sidebar width */
 }
+
+/* Add background color for the active page */
+.sidebar ul li.active > a {
+    background-color: rgb(79, 33, 33); /* Highlight color for active page */
+}
+
+/* Hide dropdown when sidebar is closed */
+.sidebar.close .dropdown-menu {
+    display: none !important;
+}
+
+
+/* Adjust the sidebar for small and medium screens */
+@media screen and (max-width: 1030px) {
+    .sidebar {
+        position: fixed; /* Sidebar stays above the main content */
+        height: 100vh;
+        z-index: 10; /* Higher z-index to ensure it's above the main content */
+        width: 250px;
+    }
+    
+    /* Sidebar in closed state */
+    .sidebar.close {
+        width: 50px;
+    }
+    
+    /* Do not adjust main-content margin on small/medium screens */
+    .main-content {
+        margin-left: 50px !important;
+    }
+}
+
+
+
 </style>
     <!-- Sidebar -->
     <div id="sidebar" class="sidebar">
@@ -297,36 +351,96 @@
     </div>
 
     <script>
-        // sidebar.js
 document.addEventListener('DOMContentLoaded', function() {
     const sidebar = document.getElementById('sidebar');
     const toggleBtn = document.getElementById('sidebarToggle');
+    const mainContent = document.querySelector('.main-content');
+
+    // Function to check screen size and adjust sidebar class
+    function adjustSidebar() {
+        if (window.innerWidth <= 1030) { // Small and medium screens
+            sidebar.classList.add('close'); // Add 'close' class
+            mainContent.style.marginLeft = '80px'; // Adjust for closed sidebar
+        } else {
+            sidebar.classList.remove('close'); // Remove 'close' class
+            mainContent.style.marginLeft = '250px'; // Adjust for open sidebar
+        }
+    }
+
+    // Call the function to set initial state
+    adjustSidebar();
+
+    // Adjust on window resize
+    window.addEventListener('resize', adjustSidebar);
 
     toggleBtn.addEventListener('click', function() {
         sidebar.classList.toggle('close');
+
+        // Adjust margin based on sidebar state
+        if (sidebar.classList.contains('close')) {
+            mainContent.style.marginLeft = '80px'; // Adjust for closed sidebar
+        } else {
+            mainContent.style.marginLeft = '250px'; // Adjust for open sidebar
+
+            // Reopen the dropdown for the active page
+            const lastOpenDropdown = localStorage.getItem('openDropdown');
+            if (lastOpenDropdown) {
+                const dropdownMenu = document.querySelector(`.dropdown-menu[data-dropdown="${lastOpenDropdown}"]`);
+                if (dropdownMenu) {
+                    dropdownMenu.classList.add('show');
+                    dropdownMenu.previousElementSibling.querySelector('i.fa-chevron-right').classList.add('fa-rotate-180');
+                }
+            }
+        }
     });
-});
 
+    // Get the last opened dropdown from localStorage
+    const lastOpenDropdown = localStorage.getItem('openDropdown');
+    if (lastOpenDropdown) {
+        const dropdownMenu = document.querySelector(`.dropdown-menu[data-dropdown="${lastOpenDropdown}"]`);
+        if (dropdownMenu) {
+            dropdownMenu.classList.add('show');
+            dropdownMenu.previousElementSibling.querySelector('i.fa-chevron-right').classList.add('fa-rotate-180');
+        }
+    }
 
-// JavaScript to handle dropdowns
-document.querySelectorAll('.dropdown-btn').forEach(button => {
-    button.addEventListener('click', function() {
-        // Close all other dropdowns
-        document.querySelectorAll('.dropdown-menu').forEach(menu => {
-            if (menu !== this.nextElementSibling) {
-                menu.classList.remove('show');
-                // Rotate the arrowhead icon to point right
-                menu.previousElementSibling.querySelector('i.fa-chevron-right').classList.remove('fa-rotate-180');
+    // JavaScript to handle dropdowns
+    document.querySelectorAll('.dropdown-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            // Close all other dropdowns
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                if (menu !== this.nextElementSibling) {
+                    menu.classList.remove('show');
+                    menu.previousElementSibling.querySelector('i.fa-chevron-right').classList.remove('fa-rotate-180');
+                }
+            });
+
+            // Toggle the clicked dropdown
+            const menu = this.nextElementSibling;
+            menu.classList.toggle('show');
+            // Rotate the arrowhead icon
+            this.querySelector('i.fa-chevron-right').classList.toggle('fa-rotate-180');
+
+            // Store the opened dropdown in localStorage
+            if (menu.classList.contains('show')) {
+                localStorage.setItem('openDropdown', menu.dataset.dropdown);
+            } else {
+                localStorage.removeItem('openDropdown');
             }
         });
+    });
 
-        // Toggle the clicked dropdown
-        const menu = this.nextElementSibling;
-        menu.classList.toggle('show');
-        // Rotate the arrowhead icon
-        this.querySelector('i.fa-chevron-right').classList.toggle('fa-rotate-180');
+    // Highlight the active page
+    const currentUrl = window.location.href;
+    document.querySelectorAll('.dropdown-menu a').forEach(link => {
+        if (currentUrl.includes(link.getAttribute('href'))) {
+            link.parentElement.classList.add('active');
+            link.closest('.dropdown-menu').classList.add('show');
+            link.closest('.dropdown-menu').previousElementSibling.querySelector('i.fa-chevron-right').classList.add('fa-rotate-180');
+        }
     });
 });
+
 
     </script>
 
