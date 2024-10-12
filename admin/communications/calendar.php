@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
         dateClick: function(info) {
             var eventTitle = prompt('Enter Event Title:');
             if (eventTitle) {
-                fetch('https://ikigaicollege.ac.ke/Portal/admin/communications/save_event.php', { // Adjusted path
+                fetch('admin/communications/save_event.php', { // Adjusted path
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (action === 'edit') {
                 var newTitle = prompt('Edit Event Title:', info.event.title);
                 if (newTitle) {
-                    fetch('https://ikigaicollege.ac.ke/Portal/admin/communications/update_event.php', { // Adjusted path
+                    fetch('admin/communications/update_event.php', { // Adjusted path
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } else if (action === 'delete') {
                 if (confirm('Are you sure you want to delete this event?')) {
-                    fetch('https://ikigaicollege.ac.ke/Portal/admin/communications/delete_event.php', { // Adjusted path
+                    fetch('admin/communications/delete_event.php', { // Adjusted path
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({

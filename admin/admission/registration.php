@@ -103,37 +103,36 @@ $modesOfStudy = $conn->query("SELECT ModeID, ModeName FROM modeofstudy");
 
 <script>
 function fetchCourses(category) {
-    console.log("fetchCourses called with category:", category); 
+    console.log("fetchCourses called with category:", category);
+    var courseDropdown = $('#courseDropdown');
+
+    // Reset the dropdown
+    courseDropdown.html('<option value="">Select Course</option>');
+
     if (category) {
-        var xhr = new XMLHttpRequest();
-        // xhr.open("GET", "../IKIGAI/admin/admission/fetch_courses.php?category=" + encodeURIComponent(category), true);
-        xhr.open("GET", "https://ikigaicollege.ac.ke/Portal/admin/admission/fetch_courses.php?category=" + encodeURIComponent(category), true);
-
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                var courses = JSON.parse(xhr.responseText);
+        $.ajax({
+            url: "https://ikigaicollege.ac.ke/Portal/admin/admission/fetch_courses.php",
+            type: "GET",
+            data: { category: category },
+            dataType: "json", // Expecting JSON response
+            success: function(courses) {
                 console.log("Fetched courses:", courses); // Debug line
-                var courseDropdown = document.getElementById('courseDropdown');
-                courseDropdown.innerHTML = '<option value="">Select Course</option>'; // Reset the dropdown
-
+                
+                // Populate the dropdown with courses
                 courses.forEach(function(course) {
-                    var option = document.createElement('option');
-                    option.value = course.CourseName;
-                    option.textContent = course.CourseName;
-                    courseDropdown.appendChild(option);
+                    courseDropdown.append($('<option></option>').val(course.CourseName).text(course.CourseName));
                 });
-            } else {
+            },
+            error: function(xhr, status, error) {
                 console.error('Error fetching courses:', xhr.statusText);
             }
-        };
-        xhr.onerror = function() {
-            console.error('Request failed');
-        };
-        xhr.send();
+        });
     } else {
-        document.getElementById('courseDropdown').innerHTML = '<option value="">Select Course</option>'; // Reset the dropdown
+        // If no category is selected, reset the dropdown
+        courseDropdown.html('<option value="">Select Course</option>');
     }
 }
+
 </script>
 
 <style>
