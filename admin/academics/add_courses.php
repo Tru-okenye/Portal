@@ -42,13 +42,7 @@ $conn->close();
 </head>
 
 <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-
+      
         h2 {
             text-align: center;
             color: #E39825;
@@ -111,7 +105,7 @@ $conn->close();
             text-align: center;
         }
     </style>
-    
+
 <body>
     <h2>Add New Course</h2>
     <form method="POST" action="">

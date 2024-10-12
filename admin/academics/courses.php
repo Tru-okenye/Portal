@@ -53,7 +53,7 @@ if ($searchCourse) {
 // Fetch units based on selected course and semester
 $units = [];
 if ($searchCourse && $searchSemester) {
-    $unitSql = "SELECT UnitCode, UnitName, CourseContent, reference_materials FROM units WHERE CourseID = (SELECT CourseID FROM Courses WHERE CourseName = ?) AND SemesterNumber = ?";
+    $unitSql = "SELECT UnitCode, UnitName, CourseContent, reference_materials FROM units WHERE CourseID = (SELECT CourseID FROM courses WHERE CourseName = ?) AND SemesterNumber = ?";
     
     $unitStmt = $conn->prepare($unitSql);
         // Check for SQL errors
