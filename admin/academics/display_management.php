@@ -76,8 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     </script>
-     <style>
-  
+    <style>
+     
 
         form {
             max-width: 600px;
@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 2px solid #3B2314;
         }
 
-        h2 {
+        form h2 {
             text-align: center;
             color: #E39825;
             margin-bottom: 20px;
@@ -126,6 +126,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         input[type="submit"]:hover {
             background-color: #3B2314; /* Dark brown on hover */
+        }
+
+        /* Responsive Styles */
+        @media screen and (max-width: 768px) {
+            form {
+                max-width: 90%;
+                padding: 15px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            select, input[type="date"], input[type="submit"] {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            form {
+                max-width: 100%;
+                padding: 10px;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+
+            select, input[type="date"], input[type="submit"] {
+                font-size: 12px;
+                padding: 6px;
+            }
+
+            input[type="submit"] {
+                padding: 10px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>

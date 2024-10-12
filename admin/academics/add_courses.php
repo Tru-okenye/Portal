@@ -43,7 +43,7 @@ $conn->close();
 
 <style>
       
-        h2 {
+        form h2 {
             text-align: center;
             color: #E39825;
             margin: 20px 0;
@@ -107,8 +107,8 @@ $conn->close();
     </style>
 
 <body>
-    <h2>Add New Course</h2>
     <form method="POST" action="">
+        <h2>Add New Course</h2>
         <label for="course_id">Course ID:</label>
         <input type="text" id="course_id" name="course_id" required>
 
