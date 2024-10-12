@@ -20,7 +20,7 @@ if ($schedulesResult->num_rows > 0) {
     <title>Semester Schedules</title>
     <style>
         table {
-            width: 80%;
+            width: 100%;
             margin: 50px auto;
             border-collapse: collapse;
             text-align: left;
