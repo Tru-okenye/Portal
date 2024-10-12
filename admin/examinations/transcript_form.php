@@ -7,7 +7,7 @@ $years = [];
 $intakes = [];
 
 // Fetch categories
-$catSql = "SELECT * FROM Categories";
+$catSql = "SELECT * FROM categories";
 $catResult = $conn->query($catSql);
 if ($catResult->num_rows > 0) {
     while ($row = $catResult->fetch_assoc()) {
@@ -16,7 +16,7 @@ if ($catResult->num_rows > 0) {
 }
 
 // Fetch distinct years and intake options
-$yearSql = "SELECT DISTINCT YEAR(RegistrationDate) AS Year FROM Students ORDER BY Year DESC";
+$yearSql = "SELECT DISTINCT YEAR(RegistrationDate) AS Year FROM students ORDER BY Year DESC";
 $yearResult = $conn->query($yearSql);
 if ($yearResult->num_rows > 0) {
     while ($row = $yearResult->fetch_assoc()) {
@@ -24,7 +24,7 @@ if ($yearResult->num_rows > 0) {
     }
 }
 
-$intakeSql = "SELECT DISTINCT IntakeName FROM Students";
+$intakeSql = "SELECT DISTINCT IntakeName FROM students";
 $intakeResult = $conn->query($intakeSql);
 if ($intakeResult->num_rows > 0) {
     while ($row = $intakeResult->fetch_assoc()) {
@@ -63,7 +63,7 @@ if ($intakeResult->num_rows > 0) {
 
         function handleCategoryChange() {
             const categoryId = document.getElementById('category').value;
-            fetchOptions('../IKIGAI/admin/examinations/fetch_courses.php', { categoryId: categoryId }, function(data) {
+            fetchOptions('admin/examinations/fetch_courses.php', { categoryId: categoryId }, function(data) {
                 updateDropdown('course', data);
                 document.getElementById('course').disabled = false;
             });
@@ -71,14 +71,14 @@ if ($intakeResult->num_rows > 0) {
 
         function handleCourseChange() {
             const courseName = document.getElementById('course').value;
-            fetchOptions('../IKIGAI/admin/examinations/fetch_years.php', {}, function(data) {
+            fetchOptions('admin/examinations/fetch_years.php', {}, function(data) {
                 updateDropdown('year', data);
                 document.getElementById('year').disabled = false;
             });
         }
 
         function handleYearChange() {
-            fetchOptions('../IKIGAI/admin/examinations/fetch_intakes.php', {}, function(data) {
+            fetchOptions('admin/examinations/fetch_intakes.php', {}, function(data) {
                 updateDropdown('intake', data);
                 document.getElementById('intake').disabled = false;
             });
