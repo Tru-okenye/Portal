@@ -8,6 +8,11 @@ use PHPMailer\PHPMailer\Exception;
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
+// Verify SMTP configuration
+// if (!$smtpConfig) {
+//     die("SMTP configuration could not be loaded.");
+// }
+
 // Fetch distinct courses
 $courseQuery = "SELECT DISTINCT CourseName FROM students";
 $courseResult = $conn->query($courseQuery);
@@ -40,9 +45,115 @@ if ($result->num_rows > 0) {
         $students[] = $row;
     }
 }
+?>
+<style>
+ <style>
+    form h2, h3 {
+        color: #E39825;
+    }
 
-// Handle form submission
-$message = ""; // Variable to store success or error message
+    label {
+        margin-right: 5px;
+        color: #3B2314;
+        font-weight: bold;
+    }
+
+    select, button {
+        width: 15%;
+        padding: 8px;
+        margin-top: 15px;
+        border: 1px solid;
+        border-radius: 5px;
+        font-size: 14px;
+        color: #fff;
+    }
+
+    select {
+      
+      color: black; 
+  }
+
+    button {
+        background-color: #3B2314;
+        color: white;
+        border: none;
+        cursor: pointer;
+        margin-top: 6px;
+        width: 12%;
+        padding: 6px;
+        border-radius: 10px;
+    }
+
+    button:hover {
+        background-color: #E39825;
+        color: #3B2314;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    } 
+
+    table, th {
+        border: 1px solid #3B2314;
+    }
+
+    th {
+        padding: 12px;
+        text-align: left;
+        background-color: #E39825;
+        color: white;
+    }
+</style>
+</style>
+
+<!-- Email Form -->
+<form method="post" action="" enctype="multipart/form-data">
+    <h2>Send Email to Students</h2>
+    <label for="course">Select Course:</label>
+    <select name="course" id="course">
+        <option value="">All Courses</option>
+        <?php foreach ($courses as $course): ?>
+            <option value="<?php echo htmlspecialchars($course); ?>">
+                <?php echo htmlspecialchars($course); ?>
+            </option>
+        <?php endforeach; ?>
+    </select><br><br>
+
+    <label for="intake">Select Intake:</label>
+    <select name="intake" id="intake">
+        <option value="">All Intakes</option>
+        <?php foreach ($intakes as $intake): ?>
+            <option value="<?php echo htmlspecialchars($intake); ?>">
+                <?php echo htmlspecialchars($intake); ?>
+            </option>
+        <?php endforeach; ?>
+    </select><br><br>
+
+    <label for="recipient">Select Student:</label>
+    <select name="recipient" id="recipient">
+        <option value="all">All Students</option>
+        <?php foreach ($students as $student): ?>
+            <option value="<?php echo htmlspecialchars($student['Email']); ?>">
+                <?php echo htmlspecialchars($student['FirstName'] . ' ' . $student['LastName'] . ' (' . $student['AdmissionNumber'] . ')'); ?>
+            </option>
+        <?php endforeach; ?>
+    </select><br><br>
+
+    <label for="subject">Subject:</label>
+    <input type="text" id="subject" name="subject" required><br><br>
+
+    <label for="body">Email Body:</label><br>
+    <textarea id="body" name="body" rows="10" cols="50" required></textarea><br><br>
+
+    <label for="attachment">Attach File:</label><br>
+    <input type="file" name="attachment" id="attachment"><br><br>
+
+    <button type="submit" name="sendEmail">Send Email</button>
+</form>
+
+<?php
 if (isset($_POST['sendEmail'])) {
     $recipient = $_POST['recipient'];
     $subject = $_POST['subject'];
@@ -73,17 +184,7 @@ if (isset($_POST['sendEmail'])) {
     $attachment = isset($_FILES['attachment']) ? $_FILES['attachment'] : null;
 
     // Call the sendEmail function
-    $emailSent = sendEmail($recipient, $subject, $body, $filteredStudents, $smtpConfig, $attachment);
-
-    if ($emailSent) {
-        $message = "Email sent successfully!";
-    } else {
-        $message = "Email could not be sent. Please try again.";
-    }
-
-    // Redirect to prevent resending on reload
-    header("Location: " . $_SERVER['PHP_SELF'] . "?message=" . urlencode($message));
-    exit;
+    sendEmail($recipient, $subject, $body, $filteredStudents, $smtpConfig, $attachment);
 }
 
 function sendEmail($recipient, $subject, $body, $students, $smtpConfig, $attachment) {
@@ -144,123 +245,13 @@ function sendEmail($recipient, $subject, $body, $students, $smtpConfig, $attachm
             $mail->send();
         }
 
-        return true; // Success
+        echo "Email sent successfully!";
     } catch (Exception $e) {
-        return false; // Failure
+        echo "Email could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
 }
-?>
 
 
-<style>
-    form h2, h3 {
-        color: #E39825;
-    }
 
-    label {
-        margin-right: 5px;
-        color: #3B2314;
-        font-weight: bold;
-    }
-
-    select, button {
-        width: 15%;
-        padding: 8px;
-        margin-top: 15px;
-        border: 1px solid;
-        border-radius: 5px;
-        font-size: 14px;
-        color: #fff;
-    }
-
-    select {
-      
-      color: black; 
-  }
-
-    button {
-        background-color: #3B2314;
-        color: white;
-        border: none;
-        cursor: pointer;
-        margin-top: 6px;
-        width: 12%;
-        padding: 6px;
-        border-radius: 10px;
-    }
-
-    button:hover {
-        background-color: #E39825;
-        color: #3B2314;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    } 
-
-    table, th {
-        border: 1px solid #3B2314;
-    }
-
-    th {
-        padding: 12px;
-        text-align: left;
-        background-color: #E39825;
-        color: white;
-    }
-</style>
-<!-- Display Message at the Top -->
-<?php if (isset($_GET['message'])): ?>
-    <p style="color: green; font-weight: bold;"><?php echo htmlspecialchars($_GET['message']); ?></p>
-<?php endif; ?>
-
-<!-- Email Form -->
-<form method="post" action="" enctype="multipart/form-data">
-    <h2>Send Email to Students</h2>
-    <label for="course">Select Course:</label>
-    <select name="course" id="course">
-        <option value="">All Courses</option>
-        <?php foreach ($courses as $course): ?>
-            <option value="<?php echo htmlspecialchars($course); ?>">
-                <?php echo htmlspecialchars($course); ?>
-            </option>
-        <?php endforeach; ?>
-    </select><br><br>
-
-    <label for="intake">Select Intake:</label>
-    <select name="intake" id="intake">
-        <option value="">All Intakes</option>
-        <?php foreach ($intakes as $intake): ?>
-            <option value="<?php echo htmlspecialchars($intake); ?>">
-                <?php echo htmlspecialchars($intake); ?>
-            </option>
-        <?php endforeach; ?>
-    </select><br><br>
-
-    <label for="recipient">Select Student:</label>
-    <select name="recipient" id="recipient">
-        <option value="all">All Students</option>
-        <?php foreach ($students as $student): ?>
-            <option value="<?php echo htmlspecialchars($student['Email']); ?>">
-                <?php echo htmlspecialchars($student['FirstName'] . ' ' . $student['LastName'] . ' (' . $student['AdmissionNumber'] . ')'); ?>
-            </option>
-        <?php endforeach; ?>
-    </select><br><br>
-
-    <label for="subject">Subject:</label>
-    <input type="text" id="subject" name="subject" required><br><br>
-
-    <label for="body">Email Body:</label><br>
-    <textarea id="body" name="body" rows="10" cols="50" required></textarea><br><br>
-
-    <label for="attachment">Attach File:</label><br>
-    <input type="file" name="attachment" id="attachment"><br><br>
-
-    <button type="submit" name="sendEmail">Send Email</button>
-</form>
-
-<?php
 $conn->close();
 ?>
