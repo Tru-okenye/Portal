@@ -10,7 +10,7 @@ $searchSemester = isset($_POST['semester']) ? $_POST['semester'] : '';
 $searchUnit = isset($_POST['unit']) ? $_POST['unit'] : '';
 
 // Fetch distinct categories
-$catSql = "SELECT * FROM Categories";
+$catSql = "SELECT * FROM categories";
 $catResult = $conn->query($catSql);
 $categories = [];
 if ($catResult->num_rows > 0) {
@@ -22,7 +22,7 @@ if ($catResult->num_rows > 0) {
 // Fetch courses based on selected category
 $courses = [];
 if ($searchCategory) {
-    $courseSql = "SELECT * FROM Courses WHERE CategoryID = ?";
+    $courseSql = "SELECT * FROM courses WHERE CategoryID = ?";
     $courseStmt = $conn->prepare($courseSql);
     $courseStmt->bind_param("i", $searchCategory);
     $courseStmt->execute();
@@ -36,7 +36,7 @@ if ($searchCategory) {
 
 // Fetch distinct years
 $years = [];
-$yearSql = "SELECT DISTINCT YEAR(RegistrationDate) AS Year FROM Students ORDER BY Year DESC";
+$yearSql = "SELECT DISTINCT YEAR(RegistrationDate) AS Year FROM students ORDER BY Year DESC";
 $yearResult = $conn->query($yearSql);
 if ($yearResult->num_rows > 0) {
     while ($row = $yearResult->fetch_assoc()) {
@@ -46,7 +46,7 @@ if ($yearResult->num_rows > 0) {
 
 // Fetch distinct intakes
 $intakes = [];
-$intakeSql = "SELECT DISTINCT IntakeName FROM Students";
+$intakeSql = "SELECT DISTINCT IntakeName FROM students";
 $intakeResult = $conn->query($intakeSql);
 if ($intakeResult->num_rows > 0) {
     while ($row = $intakeResult->fetch_assoc()) {
@@ -57,7 +57,7 @@ if ($intakeResult->num_rows > 0) {
 // Fetch distinct semesters based on selected course
 $semesters = [];
 if ($searchCourse) {
-    $semesterSql = "SELECT DISTINCT SemesterNumber FROM Units WHERE CourseID = (SELECT CourseID FROM Courses WHERE CourseName = ?)";
+    $semesterSql = "SELECT DISTINCT SemesterNumber FROM units WHERE CourseID = (SELECT CourseID FROM courses WHERE CourseName = ?)";
     $semesterStmt = $conn->prepare($semesterSql);
     $semesterStmt->bind_param("s", $searchCourse);
     $semesterStmt->execute();
@@ -72,7 +72,7 @@ if ($searchCourse) {
 // Fetch units based on selected course and semester
 $units = [];
 if ($searchCourse && $searchSemester) {
-    $unitSql = "SELECT * FROM Units WHERE CourseID = (SELECT CourseID FROM Courses WHERE CourseName = ?) AND SemesterNumber = ?";
+    $unitSql = "SELECT * FROM units WHERE CourseID = (SELECT CourseID FROM courses WHERE CourseName = ?) AND SemesterNumber = ?";
     $unitStmt = $conn->prepare($unitSql);
     $unitStmt->bind_param("si", $searchCourse, $searchSemester);
     $unitStmt->execute();

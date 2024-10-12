@@ -9,7 +9,7 @@ $years = [];
 $intakes = [];
 
 // Fetch categories
-$catSql = "SELECT * FROM Categories";
+$catSql = "SELECT * FROM categories";
 $catResult = $conn->query($catSql);
 if ($catResult->num_rows > 0) {
     while ($row = $catResult->fetch_assoc()) {
@@ -18,7 +18,7 @@ if ($catResult->num_rows > 0) {
 }
 
 // Fetch distinct years
-$yearSql = "SELECT DISTINCT YEAR(RegistrationDate) AS Year FROM Students ORDER BY Year DESC";
+$yearSql = "SELECT DISTINCT YEAR(RegistrationDate) AS Year FROM students ORDER BY Year DESC";
 $yearResult = $conn->query($yearSql);
 if ($yearResult->num_rows > 0) {
     while ($row = $yearResult->fetch_assoc()) {
@@ -27,7 +27,7 @@ if ($yearResult->num_rows > 0) {
 }
 
 // Fetch distinct intake options
-$intakeSql = "SELECT DISTINCT IntakeName FROM Students";
+$intakeSql = "SELECT DISTINCT IntakeName FROM students";
 $intakeResult = $conn->query($intakeSql);
 if ($intakeResult->num_rows > 0) {
     while ($row = $intakeResult->fetch_assoc()) {
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Query to get students who attended the selected exam
     $attendanceSql = "SELECT ea.admission_number, ea.full_name
                       FROM examattendance ea
-                      JOIN Students s ON ea.admission_number = s.AdmissionNumber
+                      JOIN students s ON ea.admission_number = s.AdmissionNumber
                       WHERE ea.unit_name = ? AND ea.course_name = ? AND ea.semester = ? AND ea.year = ? AND ea.intake_name = ? AND ea.attendance_status = 'Present'";
 
     $stmt = $conn->prepare($attendanceSql);
@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         function handleCategoryChange() {
             const categoryId = document.getElementById('category').value;
-            fetchOptions('../IKIGAI/admin/examinations/fetch_courses.php', { categoryId: categoryId }, function(data) {
+            fetchOptions('admin/examinations/fetch_courses.php', { categoryId: categoryId }, function(data) {
                 updateDropdown('course', data);
                 document.getElementById('course').disabled = false;
             });
@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         function handleCourseChange() {
             const courseName = document.getElementById('course').value;
-            fetchOptions('../IKIGAI/admin/examinations/fetch_years.php', {}, function(data) {
+            fetchOptions('admin/examinations/fetch_years.php', {}, function(data) {
                 updateDropdown('year', data);
                 document.getElementById('year').disabled = false;
             });
@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         function handleYearChange() {
             const year = document.getElementById('year').value;
-            fetchOptions('../IKIGAI/admin/examinations/fetch_intakes.php', {}, function(data) {
+            fetchOptions('admin/examinations/fetch_intakes.php', {}, function(data) {
                 updateDropdown('intake', data);
                 document.getElementById('intake').disabled = false;
             });
@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function handleIntakeChange() {
             const intake = document.getElementById('intake').value;
             const courseName = document.getElementById('course').value;
-            fetchOptions('../IKIGAI/admin/examinations/fetch_semesters.php', { courseName: courseName, intake: intake }, function(data) {
+            fetchOptions('admin/examinations/fetch_semesters.php', { courseName: courseName, intake: intake }, function(data) {
                 updateDropdown('semester', data);
                 document.getElementById('semester').disabled = false;
             });
@@ -130,13 +130,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function handleSemesterChange() {
             const courseName = document.getElementById('course').value;
             const semesterNumber = document.getElementById('semester').value;
-            fetchOptions('../IKIGAI/admin/examinations/fetch_units.php', { courseName: courseName, semesterNumber: semesterNumber }, function(data) {
+            fetchOptions('admin/examinations/fetch_units.php', { courseName: courseName, semesterNumber: semesterNumber }, function(data) {
                 updateDropdown('unit', data);
                 document.getElementById('unit').disabled = false;
             });
         }
     </script>
-    <link rel="stylesheet" href="../IKIGAI/assets/css/exam_mark.css"> 
+    <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/exam_mark.css"> 
 
 </head>
 <body>
