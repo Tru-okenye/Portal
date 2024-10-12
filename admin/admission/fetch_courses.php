@@ -4,7 +4,7 @@ include_once '../../config/config.php'; // Include the database connection file
 $category = $conn->real_escape_string($_GET['category']);
 
 // Fetch courses based on selected category
-$result = $conn->query("SELECT CourseName FROM Courses WHERE CategoryID = (SELECT CategoryID FROM Categories WHERE CategoryName = '$category')");
+$result = $conn->query("SELECT CourseName FROM courses WHERE CategoryID = (SELECT CategoryID FROM categories WHERE CategoryName = '$category')");
 
 $courses = [];
 if ($result->num_rows > 0) {
