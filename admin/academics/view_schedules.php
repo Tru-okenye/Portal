@@ -81,12 +81,12 @@ if ($schedulesResult->num_rows > 0) {
 
         @media screen and (max-width: 480px) {
             table, th, td {
-                font-size: 18px;
+                font-size: 14px;
                 padding: 4px;
             }
 
             h2 {
-                font-size: 15px;
+                font-size: 11px;
             }
 
             td {
