@@ -1,7 +1,5 @@
 <?php
 include_once __DIR__ . '/../../config/config.php';
-
-// Initialize variables
 $categories = [];
 $courses = [];
 
@@ -11,24 +9,6 @@ $catResult = $conn->query($catSql);
 if ($catResult->num_rows > 0) {
     while ($row = $catResult->fetch_assoc()) {
         $categories[] = $row;
-    }
-}
-
-// Handle form submission for fetching courses based on selected category
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['category'])) {
-    $selectedCategoryID = $_POST['category'];
-
-    // Fetch courses based on selected category
-    $courseSql = "SELECT * FROM courses WHERE CategoryID = ?";
-    $courseStmt = $conn->prepare($courseSql);
-    $courseStmt->bind_param("i", $selectedCategoryID);
-    $courseStmt->execute();
-    $courseResult = $courseStmt->get_result();
-
-    if ($courseResult->num_rows > 0) {
-        while ($row = $courseResult->fetch_assoc()) {
-            $courses[] = $row;
-        }
     }
 }
 
@@ -45,7 +25,7 @@ $modesOfStudy = $conn->query("SELECT ModeID, ModeName FROM modeofstudy");
     <!-- Personal Information -->
     <fieldset>
         <legend>Personal Information</legend>
-        
+        <!-- Personal Information Fields -->
         <label for="admissionNumber">Admission Number:</label>
         <input type="text" id="admissionNumber" name="admissionNumber" required><br>
         
@@ -85,30 +65,23 @@ $modesOfStudy = $conn->query("SELECT ModeID, ModeName FROM modeofstudy");
         <legend>Education Details</legend>
         
         <label for="category">Category:</label>
-        <select id="category" name="category" required onchange="this.form.submit()">
+        <select id="category" name="category" required onchange="fetchCourses(this.value)">
             <option value="">Select Category</option>
             <?php foreach ($categories as $row) { ?>
-                <option value="<?php echo $row['CategoryID']; ?>" <?php echo (isset($selectedCategoryID) && $selectedCategoryID == $row['CategoryID']) ? 'selected' : ''; ?>>
-                    <?php echo htmlspecialchars($row['CategoryName']); ?>
-                </option>
+                <option value="<?php echo $row['CategoryID']; ?>"><?php echo $row['CategoryName']; ?></option>
             <?php } ?>
         </select><br>
         
         <label for="course">Course:</label>
         <select id="courseDropdown" name="course" required>
             <option value="">Select Course</option>
-            <?php foreach ($courses as $course) { ?>
-                <option value="<?php echo htmlspecialchars($course['CourseName']); ?>">
-                    <?php echo htmlspecialchars($course['CourseName']); ?>
-                </option>
-            <?php } ?>
         </select><br>
         
         <label for="intake">Intake:</label>
         <select id="intake" name="intake" required>
             <option value="">Select Intake</option>
             <?php while ($row = $intakes->fetch_assoc()) { ?>
-                <option value="<?php echo htmlspecialchars($row['IntakeName']); ?>"><?php echo htmlspecialchars($row['IntakeName']); ?></option>
+                <option value="<?php echo $row['IntakeName']; ?>"><?php echo $row['IntakeName']; ?></option>
             <?php } ?>
         </select><br>
         
@@ -119,13 +92,52 @@ $modesOfStudy = $conn->query("SELECT ModeID, ModeName FROM modeofstudy");
         <select id="modeOfStudy" name="modeOfStudy" required>
             <option value="">Select Mode of Study</option>
             <?php while ($row = $modesOfStudy->fetch_assoc()) { ?>
-                <option value="<?php echo htmlspecialchars($row['ModeID']); ?>"><?php echo htmlspecialchars($row['ModeName']); ?></option>
+                <option value="<?php echo $row['ModeID']; ?>"><?php echo $row['ModeName']; ?></option>
             <?php } ?>
         </select><br>
 
         <button type="submit">Submit</button>
     </fieldset>
 </form>
+
+<script>
+async function fetchCourses(categoryId) {
+    console.log("fetchCourses called with categoryId:", categoryId); 
+    if (categoryId) {
+        try {
+            const response = await fetch('fetch_courses.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    categoryId: categoryId,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const courses = await response.json();
+            console.log("Fetched courses:", courses); // Debug line
+            const courseDropdown = document.getElementById('courseDropdown');
+            courseDropdown.innerHTML = '<option value="">Select Course</option>'; // Reset the dropdown
+
+            courses.forEach(course => {
+                const option = document.createElement('option');
+                option.value = course.CourseName; // Update as per your column names
+                option.textContent = course.CourseName; // Update as per your column names
+                courseDropdown.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error fetching courses:', error);
+        }
+    } else {
+        document.getElementById('courseDropdown').innerHTML = '<option value="">Select Course</option>'; // Reset the dropdown
+    }
+}
+</script>
 
 
 <style>
