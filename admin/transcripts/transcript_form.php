@@ -85,40 +85,73 @@ if ($intakeResult->num_rows > 0) {
         }
     </script>
     <style>
+    .card {
+        width: 70%;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin: 20px auto; /* Center the card */
+    }
+
+    h1 {
+        color: #E39825;
+        text-align: center; /* Center the title */
+    }
+
+    label {
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+
+    select {
+        padding: 5px;
+        margin-top: 5px;
+        width: 50%;
+    }
+
+    input[type="submit"] {
+        background-color: #E39825;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 15px;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #3B2314;
+    }
+
+    /* Responsive Styles */
+    @media screen and (max-width: 768px) {
         .card {
-            width: 70%;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin: 20px 0;
+            width: 90%; /* Adjust width for small screens */
+            padding: 15px; /* Reduce padding for smaller screens */
         }
-        h1 {
-            color: #E39825;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-        }
+
         select {
-            padding: 5px;
-            margin-top: 5px;
-            width: 50%;
+            width: 100%; /* Full width for select on small screens */
         }
+
         input[type="submit"] {
-            background-color: #E39825;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 15px;
-            cursor: pointer;
-            margin-top: 15px;
+            width: 100%; /* Full width for submit button */
         }
-        input[type="submit"]:hover {
-            background-color: #3B2314;
+    }
+
+    @media screen and (max-width: 480px) {
+        h1 {
+            font-size: 24px; /* Adjust font size for smaller screens */
         }
-    </style>
+
+        label {
+            font-size: 16px; /* Larger font for better readability */
+        }
+    }
+</style>
+
 </head>
 <body>
     <h1>Generate Transcript</h1>
