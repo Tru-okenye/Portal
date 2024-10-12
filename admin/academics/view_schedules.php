@@ -65,28 +65,28 @@ if ($schedulesResult->num_rows > 0) {
         /* Responsive Styles */
         @media screen and (max-width: 768px) {
             table {
-                font-size: 12px;
+                font-size: 17px;
                 width: 100%;
             }
 
             th, td {
                 padding: 6px;
-                font-size: 12px;
+                font-size: 16px;
             }
 
             h2 {
-                font-size: 20px;
+                font-size: 22px;
             }
         }
 
         @media screen and (max-width: 480px) {
             table, th, td {
-                font-size: 10px;
+                font-size: 18px;
                 padding: 4px;
             }
 
             h2 {
-                font-size: 18px;
+                font-size: 15px;
             }
 
             td {
