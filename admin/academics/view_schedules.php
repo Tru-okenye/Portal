@@ -71,6 +71,11 @@ if ($schedulesResult->num_rows > 0) {
                     <td><?php echo htmlspecialchars($schedule['semester']); ?></td>
                     <td><?php echo htmlspecialchars($schedule['start_date']); ?></td>
                     <td><?php echo htmlspecialchars($schedule['end_date']); ?></td>
+
+                    <td>
+                        <a class="action-btn" href="edit_schedule.php?id=<?php echo $schedule['id']; ?>">Edit</a>
+                        <a class="action-btn delete-btn" href="delete_schedule.php?id=<?php echo $schedule['id']; ?>" onclick="return confirm('Are you sure you want to delete this schedule?')">Delete</a>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
