@@ -66,7 +66,7 @@ $modesOfStudy = $conn->query("SELECT ModeID, ModeName FROM modeofstudy");
         <legend>Education Details</legend>
         
         <label for="category">Category:</label>
-        <select id="category" name="category" required onchange="fetchCourses(this.value)">
+        <select id="category" name="category" required onchange="handleCategoryChange()">
             <option value="">Select Category</option>
             <?php foreach ($categories as $row) { ?>
                 <option value="<?php echo $row['CategoryName']; ?>"><?php echo $row['CategoryName']; ?></option>
