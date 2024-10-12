@@ -96,7 +96,8 @@ $conn->close();
         border-radius: 5px;
         cursor: pointer;
         position: fixed; /* Changed to fixed for consistent positioning */
-        top: 20px; /* Adjusted top position for better visibility */
+        top: 100px; /* Adjusted top position for better visibility */
+        margin-bottom: 5px;
         right: 20px;
         font-size: 16px;
         text-decoration: none;
@@ -138,7 +139,8 @@ $conn->close();
             padding: 6px 12px; /* Further reduced padding on small screens */
             font-size: 12px; /* Smaller font size on small screens */
             right: 10px; /* Adjusted right position for small screens */
-            top: 10px; /* Adjusted top position for small screens */
+            top: 80px; /* Adjusted top position for better visibility */
+        margin-bottom: 5px;
         }
 
         .delete-unit {
