@@ -14,7 +14,7 @@ if (!$unitCode) {
 }
 
 // Fetch unit details
-$unitSql = "SELECT UnitCode, UnitName, CourseContent, reference_materials FROM Units WHERE UnitCode = ?";
+$unitSql = "SELECT UnitCode, UnitName, CourseContent, reference_materials FROM units WHERE UnitCode = ?";
 $stmt = $conn->prepare($unitSql);
 $stmt->bind_param("s", $unitCode);
 
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $newCourseContent = $_POST['courseContent'];
     $newReferenceMaterials = $_POST['referenceMaterials'];
 
-    $updateSql = "UPDATE Units SET CourseContent = ?, reference_materials = ? WHERE UnitCode = ?";
+    $updateSql = "UPDATE units SET CourseContent = ?, reference_materials = ? WHERE UnitCode = ?";
     $updateStmt = $conn->prepare($updateSql);
     $updateStmt->bind_param("sss", $newCourseContent, $newReferenceMaterials, $unitCode);
 
@@ -63,7 +63,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Unit</title>
-    <link rel="stylesheet" href="../IKIGAI/assets/css/courses.css"> 
+    <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/courses.css"> 
 </head>
 <body>
 

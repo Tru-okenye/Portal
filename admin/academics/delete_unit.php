@@ -5,7 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $unitCode = $_POST['unitCode'];
     
     // Prepare SQL statement to delete the unit
-    $sql = "DELETE FROM Units WHERE UnitCode = ?";
+    $sql = "DELETE FROM units WHERE UnitCode = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $unitCode);
 

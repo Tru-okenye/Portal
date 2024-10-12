@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $contactHours = $_POST['contactHours'];
     $referenceMaterials = $_POST['referenceMaterials'];
 
-    $sql = "INSERT INTO Units (CourseID, SemesterNumber, UnitCode, UnitName, CourseContent, ContactHours, reference_materials) 
+    $sql = "INSERT INTO units (CourseID, SemesterNumber, UnitCode, UnitName, CourseContent, ContactHours, reference_materials) 
             VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sisssis", $courseID, $semester, $unitCode, $unitName, $courseContent, $contactHours, $referenceMaterials);

@@ -1,4 +1,8 @@
 <?php
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 include_once __DIR__ . '/../../config/config.php';
 
 // Initialize variables for search criteria
@@ -50,10 +54,21 @@ if ($searchCourse) {
 $units = [];
 if ($searchCourse && $searchSemester) {
     $unitSql = "SELECT UnitCode, UnitName, CourseContent, reference_materials FROM units WHERE CourseID = (SELECT CourseID FROM Courses WHERE CourseName = ?) AND SemesterNumber = ?";
+    
     $unitStmt = $conn->prepare($unitSql);
+        // Check for SQL errors
+        if (!$unitStmt) {
+            echo "SQL Error: " . $conn->error;
+        }
     $unitStmt->bind_param("si", $searchCourse, $searchSemester);
     $unitStmt->execute();
     $unitResult = $unitStmt->get_result();
+
+       // Debug: Check for errors after executing the query
+       if ($unitStmt->error) {
+        echo "Error: " . $unitStmt->error; // Check for SQL errors
+    }
+
     if ($unitResult->num_rows > 0) {
         while ($row = $unitResult->fetch_assoc()) {
             $units[] = $row;

@@ -5,7 +5,7 @@ if (isset($_GET['admissionNumber'])) {
     $admissionNumber = $_GET['admissionNumber'];
 
     // Prepare and execute the delete query
-    $sql = "DELETE FROM Students WHERE AdmissionNumber = ?";
+    $sql = "DELETE FROM students WHERE AdmissionNumber = ?";
     
     if ($stmt = $conn->prepare($sql)) {
         $stmt->bind_param("s", $admissionNumber);
