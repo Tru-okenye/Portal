@@ -103,6 +103,7 @@ $modesOfStudy = $conn->query("SELECT ModeID, ModeName FROM modeofstudy");
 
 <script>
 function fetchCourses(category) {
+    console.log("fetchCourses called with category:", category); 
     if (category) {
         var xhr = new XMLHttpRequest();
         // xhr.open("GET", "../IKIGAI/admin/admission/fetch_courses.php?category=" + encodeURIComponent(category), true);
@@ -110,26 +111,21 @@ function fetchCourses(category) {
 
         xhr.onload = function() {
             if (xhr.status === 200) {
-        console.log(xhr.responseText); // Add this line to check the response
-        try {
-            var courses = JSON.parse(xhr.responseText);
-        } catch (e) {
-            console.error('Error parsing JSON:', e, xhr.responseText);
-            return;
-        }
-        var courseDropdown = document.getElementById('courseDropdown');
-        courseDropdown.innerHTML = '<option value="">Select Course</option>'; // Reset the dropdown
+                var courses = JSON.parse(xhr.responseText);
+                console.log("Fetched courses:", courses); // Debug line
+                var courseDropdown = document.getElementById('courseDropdown');
+                courseDropdown.innerHTML = '<option value="">Select Course</option>'; // Reset the dropdown
 
-        courses.forEach(function(course) {
-            var option = document.createElement('option');
-            option.value = course.CourseName;
-            option.textContent = course.CourseName;
-            courseDropdown.appendChild(option);
-        });
-    } else {
-        console.error('Error fetching courses:', xhr.statusText);
-    }
-};
+                courses.forEach(function(course) {
+                    var option = document.createElement('option');
+                    option.value = course.CourseName;
+                    option.textContent = course.CourseName;
+                    courseDropdown.appendChild(option);
+                });
+            } else {
+                console.error('Error fetching courses:', xhr.statusText);
+            }
+        };
         xhr.onerror = function() {
             console.error('Request failed');
         };
