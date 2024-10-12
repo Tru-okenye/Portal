@@ -60,6 +60,7 @@ if ($schedulesResult->num_rows > 0) {
                 <th>Semester</th>
                 <th>Start Date</th>
                 <th>End Date</th>
+                <th>Actions</th> <!-- New column for actions -->
             </tr>
         </thead>
         <tbody>
@@ -71,11 +72,11 @@ if ($schedulesResult->num_rows > 0) {
                     <td><?php echo htmlspecialchars($schedule['semester']); ?></td>
                     <td><?php echo htmlspecialchars($schedule['start_date']); ?></td>
                     <td><?php echo htmlspecialchars($schedule['end_date']); ?></td>
-
                     <td>
-                        <a class="action-btn" href="edit_schedule.php?id=<?php echo $schedule['id']; ?>">Edit</a>
-                        <a class="action-btn delete-btn" href="delete_schedule.php?id=<?php echo $schedule['id']; ?>" onclick="return confirm('Are you sure you want to delete this schedule?')">Delete</a>
-                    </td>
+                    <a href="index.php?page=academics/edit_schedule&schedule_id=<?php echo urlencode($schedule['id']); ?>">Edit</a>
+                    <a href="index.php?page=academics/delete_schedule&schedule_id=<?php echo urlencode($schedule['id']); ?>" onclick="return confirm('Are you sure you want to delete this schedule?')">Delete</a>
+                </td>
+                    
                 </tr>
             <?php endforeach; ?>
         </tbody>
