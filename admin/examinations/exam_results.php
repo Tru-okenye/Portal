@@ -77,8 +77,93 @@ if ($intakeResult->num_rows > 0) {
             });
         }
     </script>
-    <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/exam_results.css"> 
+    <style>
+        
+    form h2, h3 {
+        color: #cf881d; 
+        text-align: center; /* Center align the headings */
+    }
 
+    label {
+        margin-right: 5px;
+        color: #3B2314;
+        font-weight: bold;
+    }
+
+    select, button {
+        width: 100%; /* Full width on small screens */
+        padding: 8px;
+        margin-top: 15px;
+        border: 1px solid;
+        border-radius: 5px;
+        font-size: 14px;
+        color: #fff;
+        box-sizing: border-box; /* Include padding in width */
+    }
+
+    select {
+        color: black; 
+    }
+
+    .button {
+        background-color: #3B2314;
+        color: white;
+        border: none;
+        cursor: pointer;
+        margin-top: 6px;
+        width: 100%; /* Full width on small screens */
+        padding: 10px; /* Increase padding for better touch targets */
+        border-radius: 10px;
+    }
+
+    .button:hover {
+        background-color: #E39825;
+        color: #3B2314;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    } 
+
+    table, th {
+        border: 1px solid #3B2314;
+    }
+
+    th {
+        padding: 12px;
+        text-align: left;
+        background-color: #E39825;
+        color: white;
+    }
+
+    /* Responsive Styles */
+    @media screen and (min-width: 481px) and (max-width: 768px) {
+        select, .button {
+            width: 48%; /* Adjust width for medium screens */
+            display: inline-block; /* Display buttons and selects side by side */
+            margin-right: 4%; /* Space between elements */
+        }
+
+        .button {
+            margin-top: 0; /* Remove margin on button for better alignment */
+        }
+
+        /* Reset the right margin for the last button */
+        .button:last-of-type, select:last-of-type {
+            margin-right: 0;
+        }
+    }
+
+    @media screen and (min-width: 769px) {
+        select, .button {
+            width: 15%; /* Keep original width for large screens */
+        }
+    }
+
+
+    </style>
 </head>
 <body>
     <form method="post" action="">
