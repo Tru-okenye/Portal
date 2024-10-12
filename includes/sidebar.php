@@ -296,6 +296,7 @@
                         <li><a href="index.php?page=academics/courses">Courses</a></li>
                         <!-- <li><a href="#">Intakes</a></li> -->
                         <li><a href="index.php?page=academics/display_management">Session Reporting</a></li>
+                        <li><a href="index.php?page=academics/view_schedules">View schedules</a></li>
                     </ul>
                 </li>
 
