@@ -24,7 +24,7 @@ $_SESSION['searchYear'] = $searchYear;
 $_SESSION['searchIntake'] = $searchIntake;
 
 // Fetch distinct categories
-$catSql = "SELECT DISTINCT CategoryName FROM Students";
+$catSql = "SELECT DISTINCT CategoryName FROM students";
 $catResult = $conn->query($catSql);
 $categories = [];
 if ($catResult->num_rows > 0) {
@@ -36,7 +36,7 @@ if ($catResult->num_rows > 0) {
 // Fetch courses based on selected category
 $courses = [];
 if ($searchCategory) {
-    $courseSql = "SELECT DISTINCT CourseName FROM Students WHERE CategoryName = ?";
+    $courseSql = "SELECT DISTINCT CourseName FROM students WHERE CategoryName = ?";
     $courseStmt = $conn->prepare($courseSql);
     $courseStmt->bind_param("s", $searchCategory);
     $courseStmt->execute();
@@ -50,7 +50,7 @@ if ($searchCategory) {
 
 // Fetch distinct years
 $years = [];
-$yearSql = "SELECT DISTINCT YEAR(RegistrationDate) AS Year FROM Students ORDER BY Year DESC";
+$yearSql = "SELECT DISTINCT YEAR(RegistrationDate) AS Year FROM students ORDER BY Year DESC";
 $yearResult = $conn->query($yearSql);
 if ($yearResult->num_rows > 0) {
     while ($row = $yearResult->fetch_assoc()) {
@@ -60,7 +60,7 @@ if ($yearResult->num_rows > 0) {
 
 // Fetch distinct intakes
 $intakes = [];
-$intakeSql = "SELECT DISTINCT IntakeName FROM Students";
+$intakeSql = "SELECT DISTINCT IntakeName FROM students";
 $intakeResult = $conn->query($intakeSql);
 if ($intakeResult->num_rows > 0) {
     while ($row = $intakeResult->fetch_assoc()) {
@@ -71,7 +71,7 @@ if ($intakeResult->num_rows > 0) {
 // Fetch students based on selected filters
 $students = [];
 if ($searchCategory && $searchCourse && $searchYear && $searchIntake) {
-    $sql = "SELECT * FROM Students 
+    $sql = "SELECT * FROM students 
         WHERE CategoryName = ? 
         AND CourseName = ? 
         AND YEAR(RegistrationDate) = ? 
@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sendEmail'])) {
     $attachment = $_FILES['attachment'];
 
     // Fetch the student's email based on admission number
-    $emailSql = "SELECT Email FROM Students WHERE AdmissionNumber = ?";
+    $emailSql = "SELECT Email FROM students WHERE AdmissionNumber = ?";
     $emailStmt = $conn->prepare($emailSql);
     $emailStmt->bind_param("s", $admissionNumber);
     $emailStmt->execute();
@@ -165,7 +165,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Confirmation List</title>
-    <link rel="stylesheet" href="../IKIGAI/assets/css/confirmation.css"> 
+    <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/confirmation.css"> 
 
 </head>
 

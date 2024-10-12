@@ -4,7 +4,7 @@ $categories = [];
 $courses = [];
 
 // Fetch categories
-$catSql = "SELECT * FROM Categories";
+$catSql = "SELECT * FROM categories";
 $catResult = $conn->query($catSql);
 if ($catResult->num_rows > 0) {
     while ($row = $catResult->fetch_assoc()) {
@@ -13,10 +13,10 @@ if ($catResult->num_rows > 0) {
 }
 
 // Fetch intakes for the dropdown
-$intakes = $conn->query("SELECT IntakeName FROM Intakes");
+$intakes = $conn->query("SELECT IntakeName FROM intakes");
 
 // Fetch modes of study for the dropdown
-$modesOfStudy = $conn->query("SELECT ModeID, ModeName FROM ModeOfStudy");
+$modesOfStudy = $conn->query("SELECT ModeID, ModeName FROM modeofstudy");
 ?>
 
 <h2>Student Registration</h2>
@@ -105,7 +105,9 @@ $modesOfStudy = $conn->query("SELECT ModeID, ModeName FROM ModeOfStudy");
 function fetchCourses(category) {
     if (category) {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "../IKIGAI/admin/admission/fetch_courses.php?category=" + encodeURIComponent(category), true);
+        // xhr.open("GET", "../IKIGAI/admin/admission/fetch_courses.php?category=" + encodeURIComponent(category), true);
+        xhr.open("GET", "https://ikigaicollege.ac.ke/Portal/admin/admission/fetch_courses.php?category=" + encodeURIComponent(category), true);
+
         xhr.onload = function() {
             if (xhr.status === 200) {
                 var courses = JSON.parse(xhr.responseText);
