@@ -152,21 +152,7 @@ $conn->close();
         color: black; 
     }
 
-    button {
-        background-color: #3B2314;
-        color: white;
-        border: none;
-        cursor: pointer;
-        margin-top: 6px;
-        width: 100%; /* Full width on small screens */
-        padding: 10px; /* Increase padding for better touch targets */
-        border-radius: 10px;
-    }
 
-    button:hover {
-        background-color: #E39825;
-        color: #3B2314;
-    }
 
     table {
         width: 100%;

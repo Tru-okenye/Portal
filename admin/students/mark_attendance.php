@@ -141,7 +141,7 @@ if (isset($_POST['category'])) {
         color: black; 
     }
 
-    button {
+    form button {
         background-color: #3B2314;
         color: white;
         border: none;
@@ -152,7 +152,7 @@ if (isset($_POST['category'])) {
         border-radius: 10px;
     }
 
-    button:hover {
+    form button:hover {
         background-color: #E39825;
         color: #3B2314;
     }
@@ -176,18 +176,18 @@ if (isset($_POST['category'])) {
 
     /* Responsive Styles */
     @media screen and (min-width: 481px) and (max-width: 768px) {
-        select, button {
+        select, form button {
             width: 48%; /* Adjust width for medium screens */
             display: inline-block; /* Display buttons and selects side by side */
             margin-right: 4%; /* Space between elements */
         }
 
-        button {
+        form button {
             margin-top: 0; /* Remove margin on button for better alignment */
         }
 
         /* Reset the right margin for the last button */
-        button:last-of-type, select:last-of-type {
+        form button:last-of-type, select:last-of-type {
             margin-right: 0;
         }
     }
