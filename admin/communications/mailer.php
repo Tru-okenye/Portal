@@ -41,10 +41,8 @@ if ($result->num_rows > 0) {
     }
 }
 
-// Initialize message variables
-$message = "";
-$messageClass = "";
-
+// Handle form submission
+$message = ""; // Variable to store success or error message
 if (isset($_POST['sendEmail'])) {
     $recipient = $_POST['recipient'];
     $subject = $_POST['subject'];
@@ -75,22 +73,17 @@ if (isset($_POST['sendEmail'])) {
     $attachment = isset($_FILES['attachment']) ? $_FILES['attachment'] : null;
 
     // Call the sendEmail function
-    $emailStatus = sendEmail($recipient, $subject, $body, $filteredStudents, $smtpConfig, $attachment);
+    $emailSent = sendEmail($recipient, $subject, $body, $filteredStudents, $smtpConfig, $attachment);
 
-    if ($emailStatus === true) {
-        // Redirect to the same page with success message
-        header("Location: ".$_SERVER['PHP_SELF']."?status=success");
-        exit;
+    if ($emailSent) {
+        $message = "Email sent successfully!";
     } else {
-        $message = "Email could not be sent. Mailer Error: " . $emailStatus;
-        $messageClass = "error";
+        $message = "Email could not be sent. Please try again.";
     }
-}
 
-// Handle success message
-if (isset($_GET['status']) && $_GET['status'] == 'success') {
-    $message = "Email sent successfully!";
-    $messageClass = "success";
+    // Redirect to prevent resending on reload
+    header("Location: " . $_SERVER['PHP_SELF'] . "?message=" . urlencode($message));
+    exit;
 }
 
 function sendEmail($recipient, $subject, $body, $students, $smtpConfig, $attachment) {
@@ -117,11 +110,13 @@ function sendEmail($recipient, $subject, $body, $students, $smtpConfig, $attachm
         // Recipients
         if ($recipient === 'all') {
             foreach ($students as $student) {
+                // Personalize the email body with the admission number
                 $personalizedBody = "Dear " . $student['FirstName'] . " " . $student['LastName'] . ",\n\n" .
                                     $body . "\n\nYour Admission Number is: " . $student['AdmissionNumber'];
 
                 $mail->addAddress($student['Email']);
                 
+                // Set personalized content for each student
                 $mail->isHTML(true);
                 $mail->Subject = $subject;
                 $mail->Body    = nl2br(htmlspecialchars($personalizedBody)); // Convert new lines to <br> tags
@@ -129,29 +124,35 @@ function sendEmail($recipient, $subject, $body, $students, $smtpConfig, $attachm
 
                 // Send email
                 $mail->send();
-                $mail->clearAddresses();
+                $mail->clearAddresses(); // Clear address for the next loop
             }
         } else {
-            // Single student email
+            // Personalize for a single student
+            $student = $students[0]; // Assuming the recipient corresponds to the first match in the filtered students array
+            $personalizedBody = "Dear " . $student['FirstName'] . " " . $student['LastName'] . ",\n\n" .
+                                $body . "\n\nYour Admission Number is: " . $student['AdmissionNumber'];
+
             $mail->addAddress($recipient);
+
+            // Set content
             $mail->isHTML(true);
             $mail->Subject = $subject;
-            $mail->Body    = nl2br(htmlspecialchars($body)); 
-            $mail->AltBody = strip_tags($body);
+            $mail->Body    = nl2br(htmlspecialchars($personalizedBody)); // Convert new lines to <br> tags
+            $mail->AltBody = strip_tags($personalizedBody);
+
+            // Send email
             $mail->send();
         }
 
-        return true;
+        return true; // Success
     } catch (Exception $e) {
-        return $mail->ErrorInfo;
+        return false; // Failure
     }
 }
-
-$conn->close();
 ?>
 
+
 <style>
- 
     form h2, h3 {
         color: #E39825;
     }
@@ -210,11 +211,10 @@ $conn->close();
         color: white;
     }
 </style>
-
-
-<?php if ($message): ?>
-        <p class="<?php echo $messageClass; ?>"><?php echo $message; ?></p>
-    <?php endif; ?>
+<!-- Display Message at the Top -->
+<?php if (isset($_GET['message'])): ?>
+    <p style="color: green; font-weight: bold;"><?php echo htmlspecialchars($_GET['message']); ?></p>
+<?php endif; ?>
 
 <!-- Email Form -->
 <form method="post" action="" enctype="multipart/form-data">
@@ -260,3 +260,7 @@ $conn->close();
 
     <button type="submit" name="sendEmail">Send Email</button>
 </form>
+
+<?php
+$conn->close();
+?>
