@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
         editable: true,
         selectable: true,
         events: function(fetchInfo, successCallback, failureCallback) {
-            fetch('https://ikigaicollege.ac.ke/Portal/admin/communications/load_events.php') // Adjusted path
+            fetch('load_events.php') // Adjusted path
                 .then(response => response.json())
                 .then(data => {
                     console.log('Fetched events:', data); // Debugging line

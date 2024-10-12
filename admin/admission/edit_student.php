@@ -29,6 +29,7 @@ if (isset($_GET['admissionNumber'])) {
         $modeOfStudy = $_POST['modeOfStudy']; // New field
         // If needed, handle Application Form and Registration Date accordingly
         $status = $_POST['status']; // New field
+        
 
         // Update student record
         $updateSql = "UPDATE students 
