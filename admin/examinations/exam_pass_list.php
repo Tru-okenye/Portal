@@ -7,7 +7,7 @@ $years = [];
 $intakes = [];
 
 // Fetch categories
-$catSql = "SELECT * FROM Categories";
+$catSql = "SELECT * FROM categories";
 $catResult = $conn->query($catSql);
 if ($catResult->num_rows > 0) {
     while ($row = $catResult->fetch_assoc()) {
@@ -16,7 +16,7 @@ if ($catResult->num_rows > 0) {
 }
 
 // Fetch distinct years and intake options
-$yearSql = "SELECT DISTINCT YEAR(RegistrationDate) AS Year FROM Students ORDER BY Year DESC";
+$yearSql = "SELECT DISTINCT YEAR(RegistrationDate) AS Year FROM students ORDER BY Year DESC";
 $yearResult = $conn->query($yearSql);
 if ($yearResult->num_rows > 0) {
     while ($row = $yearResult->fetch_assoc()) {
@@ -24,7 +24,7 @@ if ($yearResult->num_rows > 0) {
     }
 }
 
-$intakeSql = "SELECT DISTINCT IntakeName FROM Students";
+$intakeSql = "SELECT DISTINCT IntakeName FROM students";
 $intakeResult = $conn->query($intakeSql);
 if ($intakeResult->num_rows > 0) {
     while ($row = $intakeResult->fetch_assoc()) {
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($courseName && $semesterNumber) {
         // Fetch units based on course and semester
-        $unitSql = "SELECT * FROM Units WHERE CourseID = (SELECT CourseID FROM Courses WHERE CourseName = ?) AND SemesterNumber = ?";
+        $unitSql = "SELECT * FROM units WHERE CourseID = (SELECT CourseID FROM courses WHERE CourseName = ?) AND SemesterNumber = ?";
         $unitStmt = $conn->prepare($unitSql);
         $unitStmt->bind_param("si", $courseName, $semesterNumber);
         $unitStmt->execute();
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($categoryID && $courseName && $intake && $year) {
         // Fetch the CategoryName based on CategoryID
-        $categorySql = "SELECT CategoryName FROM Categories WHERE CategoryID = ?";
+        $categorySql = "SELECT CategoryName FROM categories WHERE CategoryID = ?";
         $categoryStmt = $conn->prepare($categorySql);
         $categoryStmt->bind_param("i", $categoryID);
         $categoryStmt->execute();
@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Fetch students based on category name, course, intake, and year
         $studentSql = "
             SELECT s.AdmissionNumber, CONCAT(s.FirstName, ' ', s.LastName) AS StudentName
-            FROM Students s
+            FROM students s
             WHERE s.CategoryName = ?
               AND s.CourseName = ?
               AND s.IntakeName = ?
@@ -141,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($categoryID && $courseName && $intake && $year && $semesterNumber) {
         // Fetch the CategoryName based on CategoryID
-        $categorySql = "SELECT CategoryName FROM Categories WHERE CategoryID = ?";
+        $categorySql = "SELECT CategoryName FROM categories WHERE CategoryID = ?";
         $categoryStmt = $conn->prepare($categorySql);
         if ($categoryStmt === false) {
             die('Prepare failed: ' . htmlspecialchars($conn->error));
@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Fetch units based on course and semester
-        $unitSql = "SELECT UnitCode, UnitName FROM Units WHERE CourseID = (SELECT CourseID FROM Courses WHERE CourseName = ?) AND SemesterNumber = ?";
+        $unitSql = "SELECT UnitCode, UnitName FROM units WHERE CourseID = (SELECT CourseID FROM courses WHERE CourseName = ?) AND SemesterNumber = ?";
         $unitStmt = $conn->prepare($unitSql);
         if ($unitStmt === false) {
             die('Prepare failed: ' . htmlspecialchars($conn->error));
@@ -258,7 +258,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         function handleCategoryChange() {
             const categoryId = document.getElementById('category').value;
-            fetchOptions('../IKIGAI/admin/examinations/fetch_courses.php', { categoryId: categoryId }, function(data) {
+            fetchOptions('admin/examinations/fetch_courses.php', { categoryId: categoryId }, function(data) {
                 updateDropdown('course', data);
                 document.getElementById('course').disabled = false;
                 document.getElementById('semester').disabled = true;
@@ -268,13 +268,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         function handleCourseChange() {
             const courseName = document.getElementById('course').value;
-            fetchOptions('../IKIGAI/admin/examinations/fetch_semesters.php', { courseName: courseName }, function(data) {
+            fetchOptions('admin/examinations/fetch_semesters.php', { courseName: courseName }, function(data) {
                 updateDropdown('semester', data);
                 document.getElementById('semester').disabled = false;
             });
         }
     </script>
-    <link rel="stylesheet" href="../IKIGAI/assets/css/exam_pass_list.css"> 
+    <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/exam_pass_list.css"> 
    
 </head>
 <body>
