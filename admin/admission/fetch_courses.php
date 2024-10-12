@@ -4,15 +4,9 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-// Include the database connection file
-header("Access-Control-Allow-Origin: *");
 
 include_once '../../config/config.php'; 
 
-
-
-// Set the content type header for JSON response
-header('Content-Type: application/json');
 
 // Sanitize the input category
 $category = $conn->real_escape_string($_GET['category']);
@@ -36,6 +30,11 @@ if ($result->num_rows > 0) {
     }
 }
 
+
+
+
+// Set the content type header for JSON response
+header('Content-Type: application/json');
 // Output the courses as JSON
 echo json_encode($courses);
 
