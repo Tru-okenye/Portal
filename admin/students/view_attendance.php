@@ -137,7 +137,7 @@ $conn->close();
         font-weight: bold;
     }
 
-    select, button {
+    select, form button {
         width: 100%; /* Full width on small screens */
         padding: 8px;
         margin-top: 15px;
@@ -173,13 +173,13 @@ $conn->close();
 
     /* Responsive Styles */
     @media screen and (min-width: 481px) and (max-width: 768px) {
-        select, button {
+        select, form button {
             width: 48%; /* Adjust width for medium screens */
             display: inline-block; /* Display buttons and selects side by side */
             margin-right: 4%; /* Space between elements */
         }
 
-        button {
+        form button {
             margin-top: 0; /* Remove margin on button for better alignment */
         }
 
@@ -190,7 +190,7 @@ $conn->close();
     }
 
     @media screen and (min-width: 769px) {
-        select, button {
+        select, form button {
             width: 15%; /* Keep original width for large screens */
         }
     }
