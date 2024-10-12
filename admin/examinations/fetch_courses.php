@@ -4,7 +4,7 @@ include_once __DIR__ . '/../../config/config.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $categoryId = $_POST['categoryId'];
 
-    $sql = "SELECT CourseID, CourseName FROM Courses WHERE CategoryID = ?";
+    $sql = "SELECT CourseID, CourseName FROM courses WHERE CategoryID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $categoryId);
     $stmt->execute();

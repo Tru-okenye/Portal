@@ -6,7 +6,7 @@ $semesterNumber = $_POST['semesterNumber'] ?? '';
 
 $units = [];
 if ($courseName && $semesterNumber) {
-    $unitSql = "SELECT * FROM Units WHERE CourseID = (SELECT CourseID FROM Courses WHERE CourseName = ?) AND SemesterNumber = ?";
+    $unitSql = "SELECT * FROM units WHERE CourseID = (SELECT CourseID FROM courses WHERE CourseName = ?) AND SemesterNumber = ?";
     $unitStmt = $conn->prepare($unitSql);
     $unitStmt->bind_param("si", $courseName, $semesterNumber);
     $unitStmt->execute();

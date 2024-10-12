@@ -5,7 +5,7 @@ $courseName = $_POST['courseName'] ?? '';
 
 $semesters = [];
 if ($courseName) {
-    $semesterSql = "SELECT DISTINCT SemesterNumber FROM Units WHERE CourseID = (SELECT CourseID FROM Courses WHERE CourseName = ?)";
+    $semesterSql = "SELECT DISTINCT SemesterNumber FROM units WHERE CourseID = (SELECT CourseID FROM courses WHERE CourseName = ?)";
     $semesterStmt = $conn->prepare($semesterSql);
     $semesterStmt->bind_param("s", $courseName);
     $semesterStmt->execute();
