@@ -287,7 +287,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         font-weight: bold;
     }
 
-    select, button {
+    select, form button {
         width: 100%; /* Full width on small screens */
         padding: 8px;
         margin-top: 15px;
