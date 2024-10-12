@@ -13,7 +13,7 @@ $intakes = [];
 $modes_of_study = [];
 
 // Fetch categories
-$catSql = "SELECT * FROM Categories";
+$catSql = "SELECT * FROM categories";
 $catResult = $conn->query($catSql);
 if ($catResult->num_rows > 0) {
     while ($row = $catResult->fetch_assoc()) {
@@ -22,7 +22,7 @@ if ($catResult->num_rows > 0) {
 }
 
 // Fetch distinct years, intake options, and modes of study
-$yearSql = "SELECT DISTINCT YEAR(RegistrationDate) AS Year FROM Students ORDER BY Year DESC";
+$yearSql = "SELECT DISTINCT YEAR(RegistrationDate) AS Year FROM students ORDER BY Year DESC";
 $yearResult = $conn->query($yearSql);
 if ($yearResult->num_rows > 0) {
     while ($row = $yearResult->fetch_assoc()) {
@@ -30,7 +30,7 @@ if ($yearResult->num_rows > 0) {
     }
 }
 
-$intakeSql = "SELECT DISTINCT IntakeName FROM Students";
+$intakeSql = "SELECT DISTINCT IntakeName FROM students";
 $intakeResult = $conn->query($intakeSql);
 if ($intakeResult->num_rows > 0) {
     while ($row = $intakeResult->fetch_assoc()) {
@@ -38,7 +38,7 @@ if ($intakeResult->num_rows > 0) {
     }
 }
 
-$modeSql = "SELECT DISTINCT ModeOfStudy FROM Students";
+$modeSql = "SELECT DISTINCT ModeOfStudy FROM students";
 $modeResult = $conn->query($modeSql);
 if ($modeResult->num_rows > 0) {
     while ($row = $modeResult->fetch_assoc()) {
@@ -50,7 +50,7 @@ if (isset($_POST['category'])) {
     $categoryId = $_POST['category'];
     
     // Fetch courses based on selected category
-    $courseSql = "SELECT * FROM Courses WHERE CategoryID = ?";
+    $courseSql = "SELECT * FROM courses WHERE CategoryID = ?";
     $courseStmt = $conn->prepare($courseSql);
     $courseStmt->bind_param("i", $categoryId);
     $courseStmt->execute();
@@ -65,7 +65,7 @@ if (isset($_POST['category'])) {
         $courseName = $_POST['course'];
         
         // Fetch years based on selected course
-        $semesterSql = "SELECT DISTINCT SemesterNumber FROM Units WHERE CourseID = (SELECT CourseID FROM Courses WHERE CourseName = ?)";
+        $semesterSql = "SELECT DISTINCT SemesterNumber FROM units WHERE CourseID = (SELECT CourseID FROM courses WHERE CourseName = ?)";
         $semesterStmt = $conn->prepare($semesterSql);
         $semesterStmt->bind_param("s", $courseName);
         $semesterStmt->execute();
@@ -82,7 +82,7 @@ if (isset($_POST['category'])) {
             $mode_of_study = isset($_POST['mode_of_study']) ? $_POST['mode_of_study'] : '';
 
             // Fetch units based on selected course, year, and semester
-            $unitSql = "SELECT * FROM Units WHERE CourseID = (SELECT CourseID FROM Courses WHERE CourseName = ?) AND SemesterNumber = ?";
+            $unitSql = "SELECT * FROM units WHERE CourseID = (SELECT CourseID FROM courses WHERE CourseName = ?) AND SemesterNumber = ?";
             $unitStmt = $conn->prepare($unitSql);
             $unitStmt->bind_param("si", $courseName, $_POST['semester']);
             $unitStmt->execute();
@@ -97,7 +97,7 @@ if (isset($_POST['category'])) {
                 $unitCode = $_POST['unit'];
 
                 // Fetch students based on selected filters
-                $studentSql = "SELECT AdmissionNumber, CONCAT(FirstName, ' ', LastName) AS FullName FROM Students WHERE CourseName = ? AND YEAR(RegistrationDate) = ? AND IntakeName = ? AND ModeOfStudy = ?";
+                $studentSql = "SELECT AdmissionNumber, CONCAT(FirstName, ' ', LastName) AS FullName FROM students WHERE CourseName = ? AND YEAR(RegistrationDate) = ? AND IntakeName = ? AND ModeOfStudy = ?";
                 $studentStmt = $conn->prepare($studentSql);
                 $studentStmt->bind_param("siss", $courseName, $year, $intake, $mode_of_study);
                 $studentStmt->execute();
