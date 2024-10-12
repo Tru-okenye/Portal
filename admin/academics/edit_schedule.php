@@ -28,7 +28,8 @@ if (isset($_GET['schedule_id'])) {
         }
 
         // Redirect back to the schedules page
-        header("Location: index.php?page=academics/view_schedules");
+        echo '<meta http-equiv="refresh" content="2;url=index.php?page=academics/view_schedules">';
+
         exit();
     }
 } else {
