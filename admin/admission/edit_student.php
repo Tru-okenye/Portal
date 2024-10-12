@@ -5,7 +5,7 @@ if (isset($_GET['admissionNumber'])) {
     $admissionNumber = $_GET['admissionNumber'];
 
     // Fetch student record
-    $sql = "SELECT * FROM Students WHERE AdmissionNumber = ?";
+    $sql = "SELECT * FROM students WHERE AdmissionNumber = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $admissionNumber);
     $stmt->execute();
@@ -31,8 +31,8 @@ if (isset($_GET['admissionNumber'])) {
         $status = $_POST['status']; // New field
 
         // Update student record
-        $updateSql = "UPDATE Students 
-                      SET IDNumber = ?, FirstName = ?, LastName = ?, Email = ?, Phone = ?, ParentPhone = ?, CourseName = ?, IntakeName = ?, ModeOfStudy = ?, Status = ? 
+        $updateSql = "UPDATE students 
+                      SET IDNumber = ?, FirstName = ?, LastName = ?, Email = ?, Phone = ?, ParentPhone = ?, CourseName = ?, IntakeName = ?, ModeOfStudy = ?, status = ? 
                       WHERE AdmissionNumber = ?";
         $updateStmt = $conn->prepare($updateSql);
         $updateStmt->bind_param("sssssssssss", $idNumber, $firstName, $lastName, $email, $phone, $parentPhone, $course, $intake, $modeOfStudy, $status, $admissionNumber);
