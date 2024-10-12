@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (!empty($date)) {
                 // Prepare the SQL statement to prevent SQL injection
-                $sql = "INSERT INTO Attendance (AdmissionNumber, FullName, CourseName, UnitCode, SemesterNumber, Year, IntakeName, ModeOfStudy, Date, AttendanceStatus) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO attendance (AdmissionNumber, FullName, CourseName, UnitCode, SemesterNumber, Year, IntakeName, ModeOfStudy, Date, AttendanceStatus) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                 if ($stmt = $conn->prepare($sql)) {
                     $stmt->bind_param("ssssisssss", $admissionNumber, $fullName, $course, $unit, $semester, $year, $intake, $mode_of_study, $date, $status);
