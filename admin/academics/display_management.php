@@ -38,22 +38,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if ($stmt->execute()) {
         echo "<p>Semester schedule added successfully!</p>";
+
+        echo '<meta http-equiv="refresh" content="2;url=index.php?page=academics/view_schedules">';
+
     } else {
         echo "<p>Error: " . $stmt->error . "</p>";
     }
     $stmt->close();
 }
-
-// Fetch all semester schedules to display in the table
-$fetchSchedulesSql = "SELECT * FROM semester_schedule ORDER BY year DESC";
-$schedulesResult = $conn->query($fetchSchedulesSql);
-$schedules = [];
-if ($schedulesResult->num_rows > 0) {
-    while ($row = $schedulesResult->fetch_assoc()) {
-        $schedules[] = $row;
-    }
-}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,9 +64,9 @@ if ($schedulesResult->num_rows > 0) {
             let semesterCount = 0;
             if (categorySelect.value) {
                 if (categorySelect.value === "Diploma") { // Change to category name
-                    semesterCount = 6; // 6 semesters for Diploma
+                    semesterCount = 6; // 3 semesters for Diploma
                 } else if (categorySelect.value === "Certificate") { // Change to category name
-                    semesterCount = 3; // 3 semesters for Certificate
+                    semesterCount = 3; // 6 semesters for Certificate
                 }
 
                 // Add semester options based on the semester count
@@ -82,7 +76,9 @@ if ($schedulesResult->num_rows > 0) {
             }
         }
     </script>
-    <style>
+     <style>
+  
+
         form {
             max-width: 600px;
             margin: 50px auto;
@@ -115,8 +111,13 @@ if ($schedulesResult->num_rows > 0) {
             box-sizing: border-box;
         }
 
+        select:focus, input[type="date"]:focus {
+            border-color: #3B2314;
+            outline: none;
+        }
+
         input[type="submit"] {
-            background-color: #E39825;
+            background-color: #E39825; /* Orange color */
             color: white;
             font-weight: bold;
             cursor: pointer;
@@ -124,33 +125,7 @@ if ($schedulesResult->num_rows > 0) {
         }
 
         input[type="submit"]:hover {
-            background-color: #3B2314;
-        }
-
-        table {
-            width: 80%;
-            margin: 50px auto;
-            border-collapse: collapse;
-            text-align: left;
-        }
-
-        table, th, td {
-            border: 1px solid #E39825;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: center;
-        }
-
-        th {
-            background-color: #E39825;
-            color: white;
-        }
-
-        td {
-            background-color: white;
-            color: #3B2314;
+            background-color: #3B2314; /* Dark brown on hover */
         }
     </style>
 </head>
@@ -203,34 +178,6 @@ if ($schedulesResult->num_rows > 0) {
     <!-- Submit Button -->
     <input type="submit" value="Set Semester">
 </form>
-
-<!-- Table to display submitted semester schedules -->
-<?php if (!empty($schedules)): ?>
-    <table>
-        <thead>
-            <tr>
-                <th>Category</th>
-                <th>Year</th>
-                <th>Intake</th>
-                <th>Semester</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($schedules as $schedule): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($schedule['category_name']); ?></td>
-                    <td><?php echo htmlspecialchars($schedule['year']); ?></td>
-                    <td><?php echo htmlspecialchars($schedule['intake']); ?></td>
-                    <td><?php echo htmlspecialchars($schedule['semester']); ?></td>
-                    <td><?php echo htmlspecialchars($schedule['start_date']); ?></td>
-                    <td><?php echo htmlspecialchars($schedule['end_date']); ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-<?php endif; ?>
 
 </body>
 </html>
