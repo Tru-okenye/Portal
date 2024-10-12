@@ -112,7 +112,14 @@ $pdf->SetKeywords('TCPDF, PDF, result, slips');
 $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
-// Add a page
+
+// Generate result slips for each student
+foreach ($students as $student) {
+    $admission_number = $student['admission_number'];
+    $studentName = $student['student_name'];
+
+
+    // Add a page
 $pdf->AddPage();
 
 // Set background color (e.g., light blue)
@@ -141,18 +148,6 @@ $pdf->Cell(0, 10, 'IKIGAI COLLEGE OF INTERIOR DESIGN', 0, 1, 'C');
 $pdf->Cell(0, 10, 'EXAMINATION RESULT SLIPS', 0, 1, 'C');
 $pdf->Ln(10);
 
-// Generate result slips for each student
-foreach ($students as $student) {
-    $admission_number = $student['admission_number'];
-    $studentName = $student['student_name'];
-
-
-    // Add a new page for each student
-    $pdf->AddPage();
-
-    // Set background color (e.g., light blue)
-    $pdf->SetFillColor(173, 216, 230); // RGB for light blue
-    $pdf->Rect(0, 0, $pdf->getPageWidth(), $pdf->getPageHeight(), 'F'); // Fill the page with color
     // Fetch the student's grades
     $marksSql = "
         SELECT unit_code, grade 
