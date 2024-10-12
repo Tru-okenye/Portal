@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sendEmail'])) {
             $mail->Port = $_ENV['smtp_port'];
 
             // Set sender and recipient
-            $mail->setFrom('okenyetru@gmail.com', 'Truphena Okenye'); // Replace with your name
+            $mail->setFrom('ikigaicollegeke@gmail.com', 'IKIGAI COLLEGE OF INTERIOR DESIGN'); // Replace with your name
             $mail->addAddress($to);
 
             // Add subject and body
