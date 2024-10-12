@@ -1,3 +1,6 @@
+<?php
+include_once __DIR__ . '/../../config/config.php';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Handle form submission
     $idNumber = $_POST['idNumber'];
