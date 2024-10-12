@@ -10,7 +10,7 @@ $intakes = [];
 $students = [];  // Initialize students as an empty array
 
 // Fetch categories
-$catSql = "SELECT * FROM Categories";
+$catSql = "SELECT * FROM categories";
 $catResult = $conn->query($catSql);
 if ($catResult->num_rows > 0) {
     while ($row = $catResult->fetch_assoc()) {
@@ -19,7 +19,7 @@ if ($catResult->num_rows > 0) {
 }
 
 // Fetch distinct years
-$yearSql = "SELECT DISTINCT YEAR(RegistrationDate) AS Year FROM Students ORDER BY Year DESC";
+$yearSql = "SELECT DISTINCT YEAR(RegistrationDate) AS Year FROM students ORDER BY Year DESC";
 $yearResult = $conn->query($yearSql);
 if ($yearResult->num_rows > 0) {
     while ($row = $yearResult->fetch_assoc()) {
@@ -28,7 +28,7 @@ if ($yearResult->num_rows > 0) {
 }
 
 // Fetch distinct intake options
-$intakeSql = "SELECT DISTINCT IntakeName FROM Students";
+$intakeSql = "SELECT DISTINCT IntakeName FROM students";
 $intakeResult = $conn->query($intakeSql);
 if ($intakeResult->num_rows > 0) {
     while ($row = $intakeResult->fetch_assoc()) {
@@ -41,7 +41,7 @@ if (isset($_POST['category'])) {
     $categoryId = $_POST['category'];
 
     // Fetch courses based on selected category
-    $courseSql = "SELECT * FROM Courses WHERE CategoryID = ?";
+    $courseSql = "SELECT * FROM courses WHERE CategoryID = ?";
     $courseStmt = $conn->prepare($courseSql);
     $courseStmt->bind_param("i", $categoryId);
     $courseStmt->execute();
@@ -56,7 +56,7 @@ if (isset($_POST['category'])) {
         $courseName = $_POST['course'];
 
         // Fetch semesters based on selected course
-        $semesterSql = "SELECT DISTINCT SemesterNumber FROM Units WHERE CourseID = (SELECT CourseID FROM Courses WHERE CourseName = ?)";
+        $semesterSql = "SELECT DISTINCT SemesterNumber FROM units WHERE CourseID = (SELECT CourseID FROM courses WHERE CourseName = ?)";
         $semesterStmt = $conn->prepare($semesterSql);
         $semesterStmt->bind_param("s", $courseName);
         $semesterStmt->execute();
@@ -71,7 +71,7 @@ if (isset($_POST['category'])) {
             $semesterNumber = $_POST['semester'];
 
             // Fetch units based on selected course and semester
-            $unitSql = "SELECT * FROM Units WHERE CourseID = (SELECT CourseID FROM Courses WHERE CourseName = ?) AND SemesterNumber = ?";
+            $unitSql = "SELECT * FROM units WHERE CourseID = (SELECT CourseID FROM courses WHERE CourseName = ?) AND SemesterNumber = ?";
             $unitStmt = $conn->prepare($unitSql);
             $unitStmt->bind_param("si", $courseName, $semesterNumber);
             $unitStmt->execute();
@@ -95,7 +95,7 @@ if (isset($_POST['category'], $_POST['course'], $_POST['intake'], $_POST['year']
     $unitCode = $_POST['unit'];
 
     // Fetch the CategoryName based on CategoryID
-    $categorySql = "SELECT CategoryName FROM Categories WHERE CategoryID = ?";
+    $categorySql = "SELECT CategoryName FROM categories WHERE CategoryID = ?";
     $categoryStmt = $conn->prepare($categorySql);
     $categoryStmt->bind_param("i", $categoryId);
     $categoryStmt->execute();
@@ -112,7 +112,7 @@ if (isset($_POST['category'], $_POST['course'], $_POST['intake'], $_POST['year']
     // Fetch students based on selected category, course, intake, and year
     $studentSql = "
         SELECT s.AdmissionNumber, CONCAT(s.FirstName, ' ', s.LastName) AS StudentName
-        FROM Students s
+        FROM students s
         WHERE s.CategoryName = ?
           AND s.CourseName = ?
           AND s.IntakeName = ?
@@ -194,7 +194,7 @@ if (isset($_POST['category'], $_POST['course'], $_POST['intake'], $_POST['year']
 
         function handleCategoryChange() {
             const categoryId = document.getElementById('category').value;
-            fetchOptions('../IKIGAI/admin/examinations/fetch_courses.php', { categoryId: categoryId }, function(data) {
+            fetchOptions('admin/examinations/fetch_courses.php', { categoryId: categoryId }, function(data) {
                 updateDropdown('course', data);
                 document.getElementById('course').disabled = false;
                 document.getElementById('semester').disabled = true;
@@ -206,7 +206,7 @@ if (isset($_POST['category'], $_POST['course'], $_POST['intake'], $_POST['year']
 
         function handleCourseChange() {
             const courseName = document.getElementById('course').value;
-            fetchOptions('../IKIGAI/admin/examinations/fetch_years.php', { courseName: courseName }, function(data) {
+            fetchOptions('admin/examinations/fetch_years.php', { courseName: courseName }, function(data) {
                 updateDropdown('year', data);
                 document.getElementById('year').disabled = false;
                 document.getElementById('semester').disabled = true;
@@ -217,7 +217,7 @@ if (isset($_POST['category'], $_POST['course'], $_POST['intake'], $_POST['year']
 
         function handleYearChange() {
             const year = document.getElementById('year').value;
-            fetchOptions('../IKIGAI/admin/examinations/fetch_intakes.php', { year: year }, function(data) {
+            fetchOptions('admin/examinations/fetch_intakes.php', { year: year }, function(data) {
                 updateDropdown('intake', data);
                 document.getElementById('intake').disabled = false;
                 document.getElementById('semester').disabled = true;
@@ -228,7 +228,7 @@ if (isset($_POST['category'], $_POST['course'], $_POST['intake'], $_POST['year']
         function handleIntakeChange() {
             const intake = document.getElementById('intake').value;
             const courseName = document.getElementById('course').value;
-            fetchOptions('../IKIGAI/admin/examinations/fetch_semesters.php', { courseName: courseName, intake: intake }, function(data) {
+            fetchOptions('admin/examinations/fetch_semesters.php', { courseName: courseName, intake: intake }, function(data) {
                 updateDropdown('semester', data);
                 document.getElementById('semester').disabled = false;
                 document.getElementById('unit').disabled = true;
@@ -238,7 +238,7 @@ if (isset($_POST['category'], $_POST['course'], $_POST['intake'], $_POST['year']
         function handleSemesterChange() {
             const courseName = document.getElementById('course').value;
             const semesterNumber = document.getElementById('semester').value;
-            fetchOptions('../IKIGAI/admin/examinations/fetch_units.php', { courseName: courseName, semesterNumber: semesterNumber }, function(data) {
+            fetchOptions('admin/examinations/fetch_units.php', { courseName: courseName, semesterNumber: semesterNumber }, function(data) {
                 updateDropdown('unit', data);
                 document.getElementById('unit').disabled = false;
             });

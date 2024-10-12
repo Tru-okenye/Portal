@@ -9,7 +9,7 @@ $years = [];
 $intakes = [];
 
 // Fetch categories
-$catSql = "SELECT * FROM Categories";
+$catSql = "SELECT * FROM categories";
 $catResult = $conn->query($catSql);
 if ($catResult->num_rows > 0) {
     while ($row = $catResult->fetch_assoc()) {
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         function handleCategoryChange() {
             const categoryId = document.getElementById('category').value;
-            fetchOptions('../IKIGAI/admin/examinations/fetch_courses.php', { categoryId: categoryId }, function(data) {
+            fetchOptions('admin/examinations/fetch_courses.php', { categoryId: categoryId }, function(data) {
                 updateDropdown('course', data);
                 document.getElementById('course').disabled = false;
             });
@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         function handleCourseChange() {
             const courseName = document.getElementById('course').value;
-            fetchOptions('../IKIGAI/admin/examinations/fetch_years.php', {}, function(data) {
+            fetchOptions('admin/examinations/fetch_years.php', {}, function(data) {
                 updateDropdown('year', data);
                 document.getElementById('year').disabled = false;
             });
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         function handleYearChange() {
             const year = document.getElementById('year').value;
-            fetchOptions('../IKIGAI/admin/examinations/fetch_intakes.php', {}, function(data) {
+            fetchOptions('admin/examinations/fetch_intakes.php', {}, function(data) {
                 updateDropdown('intake', data);
                 document.getElementById('intake').disabled = false;
             });
@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function handleIntakeChange() {
             const intake = document.getElementById('intake').value;
             const courseName = document.getElementById('course').value;
-            fetchOptions('../IKIGAI/admin/examinations/fetch_semesters.php', { courseName: courseName, intake: intake }, function(data) {
+            fetchOptions('admin/examinations/fetch_semesters.php', { courseName: courseName, intake: intake }, function(data) {
                 updateDropdown('semester', data);
                 document.getElementById('semester').disabled = false;
             });
@@ -128,13 +128,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function handleSemesterChange() {
             const courseName = document.getElementById('course').value;
             const semesterNumber = document.getElementById('semester').value;
-            fetchOptions('../IKIGAI/admin/examinations/fetch_units.php', { courseName: courseName, semesterNumber: semesterNumber }, function(data) {
+            fetchOptions('admin/examinations/fetch_units.php', { courseName: courseName, semesterNumber: semesterNumber }, function(data) {
                 updateDropdown('unit', data);
                 document.getElementById('unit').disabled = false;
             });
         }
     </script>
-    <link rel="stylesheet" href="../IKIGAI/assets/css/exam_mark.css"> 
+    <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/exam_mark.css"> 
 </head>
 <body>
 
