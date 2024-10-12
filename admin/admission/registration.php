@@ -19,6 +19,9 @@ $intakes = $conn->query("SELECT IntakeName FROM intakes");
 $modesOfStudy = $conn->query("SELECT ModeID, ModeName FROM modeofstudy");
 ?>
 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <h2>Student Registration</h2>
 
 <form id="registrationForm" method="POST" action="index.php?page=admission/register_student" enctype="multipart/form-data">
@@ -134,6 +137,7 @@ function fetchCourses(category) {
 }
 
 </script>
+
 
 <style>
    /* Heading */

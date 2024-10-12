@@ -48,7 +48,6 @@ if (isset($_SESSION['admin_username'])) {
     <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/sidebar.css"> 
     <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/footer.css"> 
     <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/student_list.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- FontAwesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
