@@ -6,6 +6,9 @@ include_once __DIR__ . '/vendor/autoload.php'; // Adjust the path as necessary
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+// Fetch SMTP configuration
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 // Set the default time zone
 date_default_timezone_set('Africa/Nairobi');
 
@@ -29,7 +32,7 @@ if (isset($_POST['submit'])) {
 
 function checkUserExists($username) {
     global $conn;
-    $sql = "SELECT * FROM Users WHERE Username = ?";
+    $sql = "SELECT * FROM users WHERE Username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $stmt->execute();
@@ -39,7 +42,7 @@ function checkUserExists($username) {
 
 function checkStudentExists($username) {
     global $conn;
-    $sql = "SELECT * FROM Students WHERE AdmissionNumber = ?";
+    $sql = "SELECT * FROM students WHERE AdmissionNumber = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $stmt->execute();
@@ -54,16 +57,15 @@ function handlePasswordReset($email, $username) {
     $expiry = date("Y-m-d H:i:s", strtotime('+1 hour'));
 
     // Save the token and expiry to the database
-    $sql = "INSERT INTO PasswordResets (Username, Token, Expiry) VALUES (?, ?, ?)";
+    $sql = "INSERT INTO passwordresets (Username, Token, Expiry) VALUES (?, ?, ?)";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sss", $username, $token, $expiry);
     $stmt->execute();
 
     // Send the reset email
-    $resetLink = "http://localhost/IKIGAI/reset_password.php?token=$token";
+    $resetLink = "https://ikigaicollege.ac.ke/Portal/reset_password.php?token=$token";
     $subject = "Password Reset Request";
     $messageBody = "Click the following link to reset your password: $resetLink";
-    $smtpConfig = include __DIR__ . '/config/smtp_config.php';
 
     sendEmail($email, $subject, $messageBody, $smtpConfig);
 
@@ -78,15 +80,15 @@ function sendEmail($to, $subject, $body, $smtpConfig) {
     try {
         // Server settings
         $mail->isSMTP();
-        $mail->Host = $smtpConfig['host'];
+        $mail->Host = $_ENV['smtp_host']; 
         $mail->SMTPAuth = true;
-        $mail->Username = $smtpConfig['username'];
-        $mail->Password = $smtpConfig['password'];
-        $mail->SMTPSecure = $smtpConfig['encryption'];
-        $mail->Port = $smtpConfig['port'];
+        $mail->Username = $_ENV['smtp_username']; 
+        $mail->Password = $_ENV['smtp_password']; 
+        $mail->SMTPSecure = $_ENV['smtp_encryption'];
+        $mail->Port = $_ENV['smtp_port'];
 
         // Sender
-        $mail->setFrom($smtpConfig['username'], 'Your Name');
+        $mail->setFrom('ikigaicollegeke@gmail.com', 'IKIGAI COLLEGE OF INTERIOR DESIGN');
 
         // Recipient
         $mail->addAddress($to);

@@ -8,7 +8,7 @@ if (isset($_GET['token'])) {
     $token = $_GET['token'];
 
     // Check if the token exists and is valid
-    $sql = "SELECT * FROM PasswordResets WHERE Token = ? AND Expiry > NOW()";
+    $sql = "SELECT * FROM passwordresets WHERE Token = ? AND Expiry > NOW()";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $token);
     $stmt->execute();
@@ -30,13 +30,13 @@ if (isset($_GET['token'])) {
 
             if ($user) {
                 // Update the user password
-                $sql = "UPDATE Users SET Password = ? WHERE Username = ?";
+                $sql = "UPDATE users SET Password = ? WHERE Username = ?";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("ss", $hashedPassword, $username);
                 $stmt->execute();
             } elseif ($student) {
                 // Update the student password
-                $sql = "UPDATE Students SET Password = ? WHERE AdmissionNumber = ?";
+                $sql = "UPDATE students SET password = ? WHERE AdmissionNumber = ?";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("ss", $hashedPassword, $username);
                 $stmt->execute();
@@ -46,7 +46,7 @@ if (isset($_GET['token'])) {
             }
 
             // Delete the reset token
-            $sql = "DELETE FROM PasswordResets WHERE Token = ?";
+            $sql = "DELETE FROM passwordresets WHERE Token = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("s", $token);
             $stmt->execute();
@@ -61,7 +61,7 @@ if (isset($_GET['token'])) {
 
 function checkUserExists($username) {
     global $conn;
-    $sql = "SELECT * FROM Users WHERE Username = ?";
+    $sql = "SELECT * FROM users WHERE Username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $stmt->execute();
@@ -71,7 +71,7 @@ function checkUserExists($username) {
 
 function checkStudentExists($username) {
     global $conn;
-    $sql = "SELECT * FROM Students WHERE AdmissionNumber = ?";
+    $sql = "SELECT * FROM students WHERE AdmissionNumber = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $stmt->execute();
