@@ -110,20 +110,26 @@ function fetchCourses(category) {
 
         xhr.onload = function() {
             if (xhr.status === 200) {
-                var courses = JSON.parse(xhr.responseText);
-                var courseDropdown = document.getElementById('courseDropdown');
-                courseDropdown.innerHTML = '<option value="">Select Course</option>'; // Reset the dropdown
+        console.log(xhr.responseText); // Add this line to check the response
+        try {
+            var courses = JSON.parse(xhr.responseText);
+        } catch (e) {
+            console.error('Error parsing JSON:', e);
+            return;
+        }
+        var courseDropdown = document.getElementById('courseDropdown');
+        courseDropdown.innerHTML = '<option value="">Select Course</option>'; // Reset the dropdown
 
-                courses.forEach(function(course) {
-                    var option = document.createElement('option');
-                    option.value = course.CourseName;
-                    option.textContent = course.CourseName;
-                    courseDropdown.appendChild(option);
-                });
-            } else {
-                console.error('Error fetching courses:', xhr.statusText);
-            }
-        };
+        courses.forEach(function(course) {
+            var option = document.createElement('option');
+            option.value = course.CourseName;
+            option.textContent = course.CourseName;
+            courseDropdown.appendChild(option);
+        });
+    } else {
+        console.error('Error fetching courses:', xhr.statusText);
+    }
+};
         xhr.onerror = function() {
             console.error('Request failed');
         };
