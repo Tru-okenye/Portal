@@ -47,10 +47,12 @@ session_start();
         }
 
         .login-form img {
-            width: 250px;
-            height: auto;
-            margin-bottom: 15px;
-        }
+    width: 250px;
+    height: auto;
+    margin-bottom: 15px;
+    position: absolute;
+    top: 20px; /* Position the image at the top */
+}
 
         .login-container {
             /* width: 100%;
@@ -145,36 +147,23 @@ session_start();
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                height: 90vh;
+                height: 100vh;
+                /* background-color: red; */
             }
 
             .login-container {
                 padding: 15px;
                 width: 100%;
+                height: 70vh;
+                margin-top: 4rem;
             }
 
             .login-form img {
-            margin-bottom : 100px;
-            /* height: auto; */
 
         }
         }
 
-        /* Mobile Screens */
-        /* @media (max-width: 480px) {
-            .img-container {
-               display: none;
-
-            }
-            .login-form{
-                height: 100vh;
-                position: fixed;
-            }
-            .login-container {
-                width: 80%;
-                padding: 1.5rem;
-            }
-        } */
+        
     </style>
 </head>
 <body>
