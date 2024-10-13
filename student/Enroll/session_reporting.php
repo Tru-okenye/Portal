@@ -93,7 +93,7 @@ if ($result->num_rows > 0) {
                   </form>";
         } else {
             // echo "<p>You have already reported for Semester $current_semester.</p>";
-            echo "<p style='color: red; font-weight: bold; font-size: 18px; background-color: #f2dede; padding: 10px; border: 1px solid #ebccd1; border-radius: 5px;'>
+            echo "<p style='color: blue; font-weight: bold; font-size: 18px;  padding: 10px; '>
         You have already reported for Semester $current_semester.
       </p>";
 
