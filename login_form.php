@@ -145,13 +145,19 @@ session_start();
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                height: 100vh;
+                height: 90vh;
             }
 
             .login-container {
                 padding: 15px;
-                width: 80%;
+                width: 100%;
             }
+
+            .login-form img {
+            margin-bottom : 100px;
+            /* height: auto; */
+
+        }
         }
 
         /* Mobile Screens */
