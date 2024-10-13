@@ -199,7 +199,7 @@ if ($result->num_rows > 0) {
 
         .tabs a {
             display: block;
-            width: 80%; /* Full width for each tab */
+            width: 60%; /* Full width for each tab */
         }
 
         .tab-content > div {
