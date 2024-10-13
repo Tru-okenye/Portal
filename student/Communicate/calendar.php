@@ -3,6 +3,15 @@
         h1 {
             color: #E39825;
         }
+        #calendar {
+    max-width: 900px;
+    margin: 40px auto;
+    
+}
+h1{
+    color: #cf881d;;
+}
+
         </style>
 <h1>Event Calendar</h1>
 
@@ -10,7 +19,7 @@
 
 <!-- FullCalendar CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/fullcalendar.min.css">
-<link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/calendar.css"> 
+<!-- <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/calendar.css">  -->
 
 <!-- FullCalendar JS -->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
