@@ -160,7 +160,7 @@ session_start();
             }
 
             .login-container {
-                padding: 10px 15px;
+                padding: 15px;
                 width: 100%;
                 height: 60vh;
                 margin-top: 5px;
