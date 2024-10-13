@@ -187,7 +187,7 @@ if ($result->num_rows > 0) {
     }
 
     /* Media query for medium screens (tablets, etc.) */
-    @media (max-width: 768px) {
+    @media (max-width: 380px) {
         .tabs ul {
             display: block; /* Stack tabs vertically */
         }
@@ -199,7 +199,7 @@ if ($result->num_rows > 0) {
 
         .tabs a {
             display: block;
-            width: 100%; /* Full width for each tab */
+            width: 80%; /* Full width for each tab */
         }
 
         .tab-content > div {
