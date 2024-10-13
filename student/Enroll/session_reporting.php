@@ -71,31 +71,38 @@ if ($result->num_rows > 0) {
         // Calculate academic year
         $academic_year = ($current_date->format('Y')) . '/' . ($current_date->format('Y') + 1);
 
-          // Check if the student has already reported for this semester
-          $check_query = "SELECT * FROM semester_reporting_history WHERE admission_number = ? AND semester = ?";
-          $stmt_check = $conn->prepare($check_query);
-          $stmt_check->bind_param("si", $admission_number, $current_semester);
-          $stmt_check->execute();
-          $check_result = $stmt_check->get_result();
-  
-
         // Display card with semester, year of study, and academic year
         echo "<div class='card'>";
         echo "<h3>Current Semester: Semester $current_semester</h3>";
         echo "<p>Year of Study: Year $year_of_study</p>";
         echo "<p>Academic Year: $academic_year</p>";
 
-      
-        if ($check_result->num_rows === 0) {
-            // Show the report button since the student has not reported for this semester
-            echo "<form method='POST'>
-                    <input type='hidden' name='admission_number' value='$admission_number'>
-                    <input type='hidden' name='academic_year' value='$academic_year'>
-                    <button type='submit' name='report'>Report for Semester $current_semester</button>
-                  </form>";
+  
+        // Check if the student has already reported for this semester in the session
+        if (isset($_SESSION['reported_semesters']) && in_array($current_semester, $_SESSION['reported_semesters'])) {
+            echo "<p>You have already reported for Semester $current_semester. The report button has been disabled.</p>";
         } else {
-            echo "<p>You have already reported for Semester $current_semester.</p>";
+            // Check in the database if the student has already reported for this semester
+            $check_query = "SELECT * FROM semester_reporting_history WHERE admission_number = ? AND semester = ?";
+            $stmt_check = $conn->prepare($check_query);
+            $stmt_check->bind_param("si", $admission_number, $current_semester);
+            $stmt_check->execute();
+            $check_result = $stmt_check->get_result();
+
+            if ($check_result->num_rows === 0) {
+                // Show the report button since the student has not reported for this semester
+                echo "<form method='POST'>
+                        <input type='hidden' name='admission_number' value='$admission_number'>
+                        <input type='hidden' name='academic_year' value='$academic_year'>
+                        <button type='submit' name='report'>Report for Semester $current_semester</button>
+                      </form>";
+            } else {
+                // If the student has reported already in the database
+                $_SESSION['reported_semesters'][] = $current_semester; // Store it in session
+                echo "<p>You have already reported for Semester $current_semester. The report button has been disabled.</p>";
+            }
         }
+
 
         // Handle form submission
         if (isset($_POST['report'])) {
@@ -116,8 +123,6 @@ if ($result->num_rows > 0) {
 
                     // Show success alert using JavaScript
                     echo "<script>alert('You have successfully reported for Semester $current_semester!');</script>";
-                  // Refresh page to hide report button after submission
-                
                 } else {
                     echo "Error reporting: " . $conn->error;
                 }
