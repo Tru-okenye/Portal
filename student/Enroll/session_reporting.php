@@ -92,7 +92,11 @@ if ($result->num_rows > 0) {
                     <button type='submit' name='report'>Report for Semester $current_semester</button>
                   </form>";
         } else {
-            echo "<p>You have already reported for Semester $current_semester.</p>";
+            // echo "<p>You have already reported for Semester $current_semester.</p>";
+            echo "<p style='color: red; font-weight: bold; font-size: 18px; background-color: #f2dede; padding: 10px; border: 1px solid #ebccd1; border-radius: 5px;'>
+        You have already reported for Semester $current_semester.
+      </p>";
+
         }
 
         // Handle form submission
