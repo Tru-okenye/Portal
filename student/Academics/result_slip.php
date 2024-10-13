@@ -22,7 +22,7 @@ $studentDetailsSql = "
            CourseName, 
            IntakeName, 
            YEAR(RegistrationDate) AS RegistrationYear 
-    FROM Students 
+    FROM students 
     WHERE AdmissionNumber = ?
 ";
 $stmt = $conn->prepare($studentDetailsSql);
@@ -144,7 +144,7 @@ if ($marksCount >= 2) {
     echo "</table>";
 } else {
     // If student has marks for less than 2 units, display a message
-    echo "<p>You do not have sufficient exam marks for this semester. At least 2 units must have been graded to view your result slip.</p>";
+    echo "<p>Results slip not available yet.</p>";
 }
 
 $conn->close();
