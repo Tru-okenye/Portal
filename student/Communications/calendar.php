@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
         editable: false, // Disable editing
         selectable: false, // Disable selection for adding events
         events: function(fetchInfo, successCallback, failureCallback) {
-            fetch('https://ikigaicollege.ac.ke/Portal/admin/communications/load_events.php') // Adjusted path
+            fetch('admin/communications/load_events.php') // Adjusted path
                 .then(response => response.json())
                 .then(data => {
                     console.log('Fetched events:', data); // Debugging line
