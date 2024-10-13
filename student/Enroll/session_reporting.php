@@ -117,7 +117,6 @@ if ($result->num_rows > 0) {
                     // Show success alert using JavaScript
                     echo "<script>alert('You have successfully reported for Semester $current_semester!');</script>";
                   // Refresh page to hide report button after submission
-                  echo "<script>window.location.reload();</script>";
                 
                 } else {
                     echo "Error reporting: " . $conn->error;
