@@ -47,6 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             echo "Units registered successfully with pending status!";
+            echo '<meta http-equiv="refresh" content="2;url=index.php?page=Academics/units">';
+            exit();
+
         } else {
             echo "No units selected for registration.";
         }
