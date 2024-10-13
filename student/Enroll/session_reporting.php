@@ -114,7 +114,9 @@ if ($result->num_rows > 0) {
 
                     // Show success alert using JavaScript
                     echo "<script>alert('You have successfully reported for Semester $current_semester!');</script>";
-                    echo "<script>document.getElementById('reportButton').disabled = true;</script>";
+                    echo '<meta http-equiv="refresh" content="2;url=index.php?page=Enroll/session_reporting">';
+                    exit;
+                    
                 } else {
                     echo "Error reporting: " . $conn->error;
                 }
