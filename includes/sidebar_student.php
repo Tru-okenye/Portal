@@ -332,7 +332,7 @@
                         <i class="fa-solid fa-chevron-right"></i>
                     </button>
                     <ul class="dropdown-menu" data-dropdown="communications">
-                        <li><a href="index.php?page=communicate/calendar">Calendar</a></li>
+                        <li><a href="index.php?page=Communicate/calendar">Calendar</a></li>
                         <li><a href="#">News</a></li> <!-- Added a proper link for the News page -->
                     </ul>
                 </li>
