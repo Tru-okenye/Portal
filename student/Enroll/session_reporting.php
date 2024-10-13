@@ -86,9 +86,11 @@ if ($result->num_rows > 0) {
 
         if ($check_result->num_rows === 0) {
             // Show the report button since the student has not reported for this semester
-            echo "<form method='POST'>
+            echo "<form method='POST' action='index.php?page=Enroll/report_submission'>
                     <input type='hidden' name='admission_number' value='$admission_number'>
                     <input type='hidden' name='academic_year' value='$academic_year'>
+                    <input type='hidden' name='current_semester' value='$current_semester'>
+                    <input type='hidden' name='year_of_study' value='$year_of_study'>
                     <button type='submit' name='report'>Report for Semester $current_semester</button>
                   </form>";
         } else {
@@ -99,37 +101,6 @@ if ($result->num_rows > 0) {
 
         }
 
-        // Handle form submission
-        if (isset($_POST['report'])) {
-            if (isset($_POST['admission_number'], $_POST['academic_year'])) {
-                $academic_year = $_POST['academic_year'];
-
-                // Update student's status to 'Enrolled'
-                $update_query = "UPDATE students SET status = 'Enrolled' WHERE AdmissionNumber = ?";
-                $stmt_update = $conn->prepare($update_query);
-                $stmt_update->bind_param("s", $admission_number);
-
-                if ($stmt_update->execute()) {
-                    // Insert into semester reporting history
-                    $insert_history = "INSERT INTO semester_reporting_history (admission_number, semester, academic_year, year_of_study, report_date) VALUES (?, ?, ?, ?, NOW())";
-                    $stmt_history = $conn->prepare($insert_history);
-                    $stmt_history->bind_param("sisi", $admission_number, $current_semester, $academic_year, $year_of_study);
-                    $stmt_history->execute();
-
-                    // Show success alert using JavaScript
-                    echo "<script>alert('You have successfully reported for Semester $current_semester!');</script>";
-                    echo '<meta http-equiv="refresh" content="2;url=index.php?page=Enroll/session_reporting">';
-                    exit;
-                    
-                } else {
-                    echo "Error reporting: " . $conn->error;
-                }
-
-                $stmt_update->close();
-            } else {
-                echo "Required data missing! Please try again.";
-            }
-        }
 
         echo "</div>"; // Close card div
 
