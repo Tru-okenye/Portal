@@ -8,7 +8,7 @@ if (session_status() == PHP_SESSION_NONE) {
 $admissionNumber = $_SESSION['student_admission_number'];  // Replace with actual session variable if different.
 
 // Fetch the student's category, course, intake details, and registration year.
-$studentDetailsSql = "SELECT CategoryName, CourseName, IntakeName, YEAR(RegistrationDate) AS RegistrationYear FROM Students WHERE AdmissionNumber = ?";
+$studentDetailsSql = "SELECT CategoryName, CourseName, IntakeName, YEAR(RegistrationDate) AS RegistrationYear FROM students WHERE AdmissionNumber = ?";
 $stmt = $conn->prepare($studentDetailsSql);
 $stmt->bind_param("s", $admissionNumber);
 $stmt->execute();
@@ -17,7 +17,7 @@ $studentDetails = $result->fetch_assoc();
 
 // Fetch the CategoryID based on the CategoryName
 $categoryName = $studentDetails['CategoryName'];
-$categoryIdSql = "SELECT CategoryID, SemestersCount FROM Categories WHERE CategoryName = ?";
+$categoryIdSql = "SELECT CategoryID, SemestersCount FROM categories WHERE CategoryName = ?";
 $stmt = $conn->prepare($categoryIdSql);
 $stmt->bind_param("s", $categoryName);
 $stmt->execute();

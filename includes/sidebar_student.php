@@ -296,8 +296,8 @@
                         <i class="fa-solid fa-chevron-right"></i>
                     </button>
                     <ul class="dropdown-menu" data-dropdown="financials">
-                        <li><a href="index.php?page=students/mark_attendance">Fees Structure</a></li>
-                        <li><a href="index.php?page=students/generate_pdf">Fees Statement</a></li>
+                        <li><a href="#">Fees Structure</a></li>
+                        <li><a href="#">Fees Statement</a></li>
                     </ul>
                 </li>
 
@@ -333,7 +333,7 @@
                     </button>
                     <ul class="dropdown-menu" data-dropdown="communications">
                         <li><a href="index.php?page=communications/calendar">Calendar</a></li>
-                        <li><a href="index.php?page=communications/news">News</a></li> <!-- Added a proper link for the News page -->
+                        <li><a href="#">News</a></li> <!-- Added a proper link for the News page -->
                     </ul>
                 </li>
   

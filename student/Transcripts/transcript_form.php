@@ -11,7 +11,7 @@ $admissionNumber = $_SESSION['student_admission_number'];
 // Fetch the student's category, course, intake details, and registration year
 $studentDetailsSql = "
     SELECT CategoryName, CourseName, IntakeName, YEAR(RegistrationDate) AS RegistrationYear 
-    FROM Students 
+    FROM students 
     WHERE AdmissionNumber = ?
 ";
 $stmt = $conn->prepare($studentDetailsSql);
@@ -22,7 +22,7 @@ $studentDetails = $result->fetch_assoc();
 
 // Fetch CategoryID based on the CategoryName
 $categoryName = $studentDetails['CategoryName'];
-$categoryIdSql = "SELECT CategoryID, SemestersCount FROM Categories WHERE CategoryName = ?";
+$categoryIdSql = "SELECT CategoryID, SemestersCount FROM categories WHERE CategoryName = ?";
 $stmt = $conn->prepare($categoryIdSql);
 $stmt->bind_param("s", $categoryName);
 $stmt->execute();

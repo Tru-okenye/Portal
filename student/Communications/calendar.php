@@ -10,7 +10,7 @@
 
 <!-- FullCalendar CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/fullcalendar.min.css">
-<link rel="stylesheet" href="../IKIGAI/assets/css/calendar.css"> 
+<link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/calendar.css"> 
 
 <!-- FullCalendar JS -->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
         editable: false, // Disable editing
         selectable: false, // Disable selection for adding events
         events: function(fetchInfo, successCallback, failureCallback) {
-            fetch('../IKIGAI/admin/communications/load_events.php') // Adjusted path
+            fetch('admin/communications/load_events.php') // Adjusted path
                 .then(response => response.json())
                 .then(data => {
                     console.log('Fetched events:', data); // Debugging line

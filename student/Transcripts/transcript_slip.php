@@ -22,7 +22,7 @@ if ($yearOfStudy == '1') {
 // Fetch student details including first and last names
 $studentSql = "
     SELECT CourseName, IntakeName, YEAR(RegistrationDate) AS RegistrationYear, FirstName, LastName 
-    FROM Students 
+    FROM students 
     WHERE AdmissionNumber = ?
 ";
 $stmt = $conn->prepare($studentSql);
