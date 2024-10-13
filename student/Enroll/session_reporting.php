@@ -71,19 +71,21 @@ if ($result->num_rows > 0) {
         // Calculate academic year
         $academic_year = ($current_date->format('Y')) . '/' . ($current_date->format('Y') + 1);
 
+          // Check if the student has already reported for this semester
+          $check_query = "SELECT * FROM semester_reporting_history WHERE admission_number = ? AND semester = ?";
+          $stmt_check = $conn->prepare($check_query);
+          $stmt_check->bind_param("si", $admission_number, $current_semester);
+          $stmt_check->execute();
+          $check_result = $stmt_check->get_result();
+  
+
         // Display card with semester, year of study, and academic year
         echo "<div class='card'>";
         echo "<h3>Current Semester: Semester $current_semester</h3>";
         echo "<p>Year of Study: Year $year_of_study</p>";
         echo "<p>Academic Year: $academic_year</p>";
 
-        // Check if the student has already reported for this semester
-        $check_query = "SELECT * FROM semester_reporting_history WHERE admission_number = ? AND semester = ?";
-        $stmt_check = $conn->prepare($check_query);
-        $stmt_check->bind_param("si", $admission_number, $current_semester);
-        $stmt_check->execute();
-        $check_result = $stmt_check->get_result();
-
+      
         if ($check_result->num_rows === 0) {
             // Show the report button since the student has not reported for this semester
             echo "<form method='POST'>
@@ -114,6 +116,9 @@ if ($result->num_rows > 0) {
 
                     // Show success alert using JavaScript
                     echo "<script>alert('You have successfully reported for Semester $current_semester!');</script>";
+                  // Refresh page to hide report button after submission
+                  echo "<script>window.location.reload();</script>";
+                
                 } else {
                     echo "Error reporting: " . $conn->error;
                 }
