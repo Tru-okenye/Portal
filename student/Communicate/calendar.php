@@ -3,15 +3,6 @@
         h1 {
             color: #E39825;
         }
-        #calendar {
-    max-width: 900px;
-    margin: 40px auto;
-    
-}
-h1{
-    color: #cf881d;;
-}
-
         </style>
 <h1>Event Calendar</h1>
 
@@ -19,7 +10,7 @@ h1{
 
 <!-- FullCalendar CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/fullcalendar.min.css">
-<!-- <link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/calendar.css">  -->
+<link rel="stylesheet" href="https://ikigaicollege.ac.ke/Portal/assets/css/calendar.css"> 
 
 <!-- FullCalendar JS -->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
@@ -37,17 +28,24 @@ document.addEventListener('DOMContentLoaded', function() {
         editable: false, // Disable editing
         selectable: false, // Disable selection for adding events
         events: function(fetchInfo, successCallback, failureCallback) {
-            fetch('admin/communications/load_events.php') // Adjusted path
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Fetched events:', data); // Debugging line
-                    successCallback(data);
-                })
-                .catch(error => {
-                    console.error('Error fetching events:', error); // Debugging line
-                    failureCallback(error);
-                });
-        },
+    console.log('Fetching events...'); // Log when fetching starts
+    fetch('admin/communications/load_events.php') // Adjusted path
+        .then(response => {
+            if (!response.ok) { // Check if the response is not OK
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Fetched events:', data); // Log fetched data
+            successCallback(data);
+        })
+        .catch(error => {
+            console.error('Error fetching events:', error); // Log any errors
+            failureCallback(error);
+        });
+},
+
         eventClick: function(info) {
             alert('Event: ' + info.event.title + '\nDate: ' + info.event.start.toLocaleDateString()); // Display event details on click
         }
