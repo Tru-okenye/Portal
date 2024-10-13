@@ -212,7 +212,7 @@ if ($result->num_rows > 0) {
     }
 
     /* Media query for small screens (mobile phones) */
-    @media (max-width: 480px) {
+    @media (max-width: 320px) {
         .tabs ul {
             display: block;
         }
@@ -224,7 +224,7 @@ if ($result->num_rows > 0) {
 
         .tabs a {
             display: block;
-            width: 100%; /* Make each tab full width */
+            width: 60%; /* Make each tab full width */
         }
 
         table th, table td {
