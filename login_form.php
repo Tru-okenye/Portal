@@ -163,7 +163,7 @@ session_start();
                 padding: 15px;
                 width: 100%;
                 height: 60vh;
-                margin-top: 4rem;
+                margin-top: 5px;
             }
 
             .login-form img {
@@ -171,7 +171,24 @@ session_start();
         }
         }
 
-        
+        footer {
+    background-color: #3B2314; /* Dark color for the footer */
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed; /* Fixes the footer at the bottom */
+    bottom: 0; /* Positions it at the bottom */
+    left: 0; /* Ensures it spans the full width */
+    width: 100%; /* Full width */
+    font-size: 0.9rem;
+    z-index: 1000; /* Keeps it above other content */
+}
+
+footer p {
+    margin: 0;
+}
+
+
     </style>
 </head>
 <body>
@@ -196,5 +213,8 @@ session_start();
             </form>
       
     </div>
+    <footer>
+    <p>&copy; 2024 Ikigai College. All rights reserved.</p>
+</footer>
 </body>
 </html>
