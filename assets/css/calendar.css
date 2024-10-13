@@ -6,3 +6,18 @@
 h1{
     color: #cf881d;;
 }
+
+
+ /* Medium screens */
+ @media (max-width: 768px) {
+    h1 {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+
+    #calendar {
+        max-width: 700px; /* Reduce the calendar width */
+        margin: 20px auto;
+        padding: 10px; /* Add some padding for better spacing */
+    }
+}

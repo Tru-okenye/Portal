@@ -123,57 +123,120 @@ if ($result->num_rows > 0) {
                 });
             </script>
 
-            <style>
-             
-                .tabs {
-                    margin-bottom: 20px;
-                }
-                .tabs ul {
-                    list-style-type: none;
-                    padding: 0;
-                }
-                .tabs li {
-                    display: inline;
-                    margin-right: 10px;
-                }
-                .tabs a {
-                    text-decoration: none;
-                    padding: 5px 10px;
-                    border: 1px solid #ccc;
-                    border-radius: 5px;
-                    background-color: #E39825;
-                    color: white;
-                }
-                .tabs a.active {
-                    background-color: #3B2314;
-                    color: white;
-                }
-                .tab-content > div {
-                    display: none;
-                }
-                .tab-content > div.active {
-                    display: block;
-                    padding: 15px;
-                    background-color: white;
-                    border: 1px solid #ccc;
-                    border-radius: 5px;
-                    margin-top: -1px; /* overlap the borders */
-                }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin-top: 10px;
-                }
-                th, td {
-                    padding: 10px;
-                    text-align: left;
-                    border: 1px solid #ccc;
-                }
-                th {
-                    background-color: #E39825;
-                    color: white;
-                }
-            </style>
+<style>
+    /* General styling for tabs */
+    .tabs {
+        margin-bottom: 20px;
+    }
+
+    .tabs ul {
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .tabs li {
+        margin-right: 10px;
+    }
+
+    .tabs a {
+        text-decoration: none;
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #E39825;
+        color: white;
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+
+    .tabs a.active {
+        background-color: #3B2314;
+        color: white;
+    }
+
+    .tab-content > div {
+        display: none;
+    }
+
+    .tab-content > div.active {
+        display: block;
+        padding: 15px;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-top: -1px; /* overlap the borders */
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ccc;
+    }
+
+    th {
+        background-color: #E39825;
+        color: white;
+    }
+
+    /* Media query for medium screens (tablets, etc.) */
+    @media (max-width: 768px) {
+        .tabs ul {
+            display: block; /* Stack tabs vertically */
+        }
+
+        .tabs li {
+            margin-right: 0;
+            margin-bottom: 5px;
+        }
+
+        .tabs a {
+            display: block;
+            width: 100%; /* Full width for each tab */
+        }
+
+        .tab-content > div {
+            padding: 10px; /* Reduce padding on smaller screens */
+        }
+
+        table th, table td {
+            padding: 8px; /* Adjust table cell padding */
+        }
+    }
+
+    /* Media query for small screens (mobile phones) */
+    @media (max-width: 480px) {
+        .tabs ul {
+            display: block;
+        }
+
+        .tabs li {
+            margin-right: 0;
+            margin-bottom: 5px;
+        }
+
+        .tabs a {
+            display: block;
+            width: 100%; /* Make each tab full width */
+        }
+
+        table th, table td {
+            padding: 5px; /* Further reduce table cell padding for mobile */
+        }
+
+        .tab-content > div {
+            padding: 8px; /* Further reduce padding on mobile */
+        }
+    }
+</style>
+
             <?php
         } else {
             echo "Category not found!";
