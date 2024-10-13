@@ -75,11 +75,14 @@ session_start();
         }
 
         label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            text-align: left;
-        }
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    text-align: left; /* Align labels to the start */
+    width: 100%; /* Ensure labels take up full width */
+    margin-left:50px;
+}
+
 
         input[type="text"],
         input[type="password"] {
@@ -89,6 +92,7 @@ session_start();
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 14px;
+            
         }
 
         input[type="submit"] {
@@ -118,7 +122,11 @@ session_start();
         a:hover {
             text-decoration: underline;
         }
-
+.login-container h2{
+    color: #E39825;
+    position: relative;
+    /* top: 5px; */
+}
          /* Responsive Design */
          @media (max-width: 650px) {
             .large-container {
@@ -154,7 +162,7 @@ session_start();
             .login-container {
                 padding: 15px;
                 width: 100%;
-                height: 70vh;
+                height: 60vh;
                 margin-top: 4rem;
             }
 
