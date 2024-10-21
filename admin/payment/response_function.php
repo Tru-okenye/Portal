@@ -33,8 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Example: Check if the connection ID and password match with your database
 
         // Dummy data for a successful validation (you can replace this with actual student data)
-        $studentName = "Wanyama Jostine Anyango";
-        $institutionName = "Eldoret University";
+        $studentName = "Richard Okenye";
+        $institutionName = "IKIGAI COLLEGE";
 
         // If validation is successful, return a response
         $response = [
