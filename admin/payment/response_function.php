@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Dummy data for a successful validation (you can replace this with actual student data)
         $studentName = "Richard Okenye";
-        $institutionName = "IKIGAI COLLEGE";
+        $institutionName = "IKIGAI COLLEGE OF INTERIOR DESIGN";
 
         // If validation is successful, return a response
         $response = [
