@@ -114,3 +114,4 @@ if (isset($_SESSION['admin_username'])) {
     <!-- <?php include 'https://ikigaicollege.ac.ke/Portal/includes/footer.php'; ?> -->
 </body>
 </html>
+
