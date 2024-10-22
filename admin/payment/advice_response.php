@@ -21,8 +21,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         isset($requestData['request']['TransactionDate']) &&
         isset($requestData['request']['TotalAmount']) &&
         isset($requestData['request']['AccountNumber']) &&
-        isset($requestData['request']['InstitutionCode']) &&
-        isset($requestData['request']['InstitutionName'])
+        isset($requestData['request']['DocumentReferenceNumber']) &&
+        isset($requestData['request']['BankCode']) &&
+        isset($requestData['request']['BranchCode']) &&
+        isset($requestData['request']['PaymentDate']) &&
+        isset($requestData['request']['PaymentMode']) &&
+        isset($requestData['request']['PaymentAmount'])
     ) {
         // Extract headers
         $serviceName = $_SERVER['HTTP_SERVICENAME'];
@@ -34,9 +38,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $transactionReferenceCode = $requestData['request']['TransactionReferenceCode'];
         $transactionDate = $requestData['request']['TransactionDate'];
         $totalAmount = $requestData['request']['TotalAmount'];
+        $currency = $requestData['request']['Currency'] ?? ''; // Optional field
+        $documentReferenceNumber = $requestData['request']['DocumentReferenceNumber'];
+        $bankCode = $requestData['request']['BankCode'];
+        $branchCode = $requestData['request']['BranchCode'];
+        $paymentDate = $requestData['request']['PaymentDate'];
+        $paymentReferenceCode = $requestData['request']['PaymentReferenceCode'] ?? ''; // Optional field
+        $paymentMode = $requestData['request']['PaymentMode'];
+        $paymentAmount = $requestData['request']['PaymentAmount'];
+        $additionalInfo = $requestData['request']['AdditionalInfo'] ?? ''; // Optional field
         $accountNumber = $requestData['request']['AccountNumber'];
-        $institutionCode = $requestData['request']['InstitutionCode'];
-        $institutionName = $requestData['request']['InstitutionName'];
+        $accountName = $requestData['request']['AccountName'] ?? ''; // Optional field
 
         // Validate the connectionID with your database
         $sql = "SELECT * FROM connections WHERE connectionID = ?";
@@ -60,23 +72,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Check if the student exists
                 if ($studentResult->num_rows > 0) {
-                    // Prepare a successful payment advice response
-                    $response = [
-                        "header" => [
-                            "messageID" => $messageID,
-                            "statusCode" => "200",
-                            "statusDescription" => "Payment successfully received"
-                        ],
-                        "response" => [
-                            "TransactionReferenceCode" => $transactionReferenceCode,
-                            "TransactionDate" => $transactionDate,
-                            "TransactionAmount" => $totalAmount,
-                            "AccountNumber" => $accountNumber,
-                            "AccountName" => "", // Set the account name here if available
-                            "InstitutionCode" => $institutionCode,
-                            "InstitutionName" => $institutionName
-                        ]
-                    ];
+                    // Insert the payment details into the payments table
+                    $insertSql = "
+                        INSERT INTO payments (
+                            TransactionReferenceCode, 
+                            TransactionDate, 
+                            TotalAmount, 
+                            Currency, 
+                            DocumentReferenceNumber, 
+                            BankCode, 
+                            BranchCode, 
+                            PaymentDate, 
+                            PaymentReferenceCode, 
+                            PaymentMode, 
+                            PaymentAmount, 
+                            AdditionalInfo, 
+                            AccountNumber, 
+                            AccountName
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    
+                    $insertStmt = $conn->prepare($insertSql);
+                    $insertStmt->bind_param(
+                        "sssssssssssdss", 
+                        $transactionReferenceCode, 
+                        $transactionDate, 
+                        $totalAmount, 
+                        $currency, 
+                        $documentReferenceNumber, 
+                        $bankCode, 
+                        $branchCode, 
+                        $paymentDate, 
+                        $paymentReferenceCode, 
+                        $paymentMode, 
+                        $paymentAmount, 
+                        $additionalInfo, 
+                        $accountNumber, 
+                        $accountName
+                    );
+                    
+                    if ($insertStmt->execute()) {
+                        // Prepare a successful payment advice response
+                        $response = [
+                            "header" => [
+                                "messageID" => $messageID,
+                                "statusCode" => "200",
+                                "statusDescription" => "Payment successfully received and stored"
+                            ],
+                            "response" => [
+                                "TransactionReferenceCode" => $transactionReferenceCode,
+                                "TransactionDate" => $transactionDate,
+                                "TransactionAmount" => $totalAmount,
+                                "AccountNumber" => $accountNumber,
+                                "AccountName" => $accountName
+                            ]
+                        ];
+                    } else {
+                        // Error while inserting into the database
+                        $response = [
+                            "header" => [
+                                "messageID" => $messageID,
+                                "statusCode" => "500",
+                                "statusDescription" => "Error storing payment details"
+                            ],
+                            "response" => []
+                        ];
+                    }
                 } else {
                     // Student not found
                     $response = [
@@ -138,4 +198,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
     echo json_encode($response);
 }
+
 ?>
