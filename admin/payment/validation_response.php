@@ -1,31 +1,62 @@
 <?php
-
 // Include the database connection file
 include_once __DIR__ . '/../../config/config.php';
 
 // Define the endpoint for receiving validation requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the raw POST data (the request body)
-    $jsonRequest = file_get_contents('php://input');
+    $rawPostData = file_get_contents('php://input');
+
     
-    // Decode the JSON request to an associative array
-    $requestData = json_decode($jsonRequest, true);
+    // Extract JSON within <content> tags
+    if (preg_match('/<content>(.*?)<\/content>/s', $rawPostData, $matches)) {
+        $jsonRequest = $matches[1];  // Extracted JSON part
+        $requestData = json_decode($jsonRequest, true);
+        
+        // Check for JSON decoding errors
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $response = [
+                "header" => [
+                    "messageID" => "unknown",
+                    "statusCode" => "400",
+                    "statusDescription" => "Invalid JSON format."
+                ],
+                "response" => []
+            ];
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            exit;
+        }
+    } else {
+        // If <content> tag is not found, handle as an error
+        $response = [
+            "header" => [
+                "messageID" => "unknown",
+                "statusCode" => "400",
+                "statusDescription" => "Invalid request format. JSON payload missing in <content> tag."
+            ],
+            "response" => []
+        ];
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit;
+    }
 
     // Check if required headers and body fields are present
     if (
-        isset($_SERVER['HTTP_SERVICENAME']) &&
-        isset($_SERVER['HTTP_MESSAGEID']) &&
-        isset($_SERVER['HTTP_CONNECTIONID']) &&
-        isset($_SERVER['HTTP_CONNECTIONPASSWORD']) &&
+        isset($requestData['header']['serviceName']) &&
+        isset($requestData['header']['messageID']) &&
+        isset($requestData['header']['connectionID']) &&
+        isset($requestData['header']['connectionPassword']) &&
         isset($requestData['request']['TransactionReferenceCode']) &&
         isset($requestData['request']['TransactionDate']) &&
         isset($requestData['request']['InstitutionCode'])
     ) {
         // Extract headers
-        $serviceName = $_SERVER['HTTP_SERVICENAME'];
-        $messageID = $_SERVER['HTTP_MESSAGEID'];
-        $connectionID = $_SERVER['HTTP_CONNECTIONID'];
-        $connectionPassword = $_SERVER['HTTP_CONNECTIONPASSWORD'];
+        $serviceName = $requestData['header']['serviceName'];
+        $messageID = $requestData['header']['messageID'];
+        $connectionID = $requestData['header']['connectionID'];
+        $connectionPassword = $requestData['header']['connectionPassword'];
 
         // Extract body parameters
         $transactionReferenceCode = $requestData['request']['TransactionReferenceCode'];
@@ -88,7 +119,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         ],
                         "response" => [
                             "TransactionReferenceCode" => $transactionReferenceCode,
-
                         ]
                     ];
                 }

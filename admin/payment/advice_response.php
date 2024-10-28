@@ -5,18 +5,50 @@ include_once __DIR__ . '/../../config/config.php';
 
 // Define the endpoint for receiving payment advice requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the raw POST data (the request body)
-    $jsonRequest = file_get_contents('php://input');
+  // Get the raw POST data (the request body)
+  $rawPostData = file_get_contents('php://input');
+
     
-    // Decode the JSON request to an associative array
-    $requestData = json_decode($jsonRequest, true);
+  // Extract JSON within <content> tags
+  if (preg_match('/<content>(.*?)<\/content>/s', $rawPostData, $matches)) {
+      $jsonRequest = $matches[1];  // Extracted JSON part
+      $requestData = json_decode($jsonRequest, true);
+      
+      // Check for JSON decoding errors
+      if (json_last_error() !== JSON_ERROR_NONE) {
+          $response = [
+              "header" => [
+                  "messageID" => "unknown",
+                  "statusCode" => "400",
+                  "statusDescription" => "Invalid JSON format."
+              ],
+              "response" => []
+          ];
+          header('Content-Type: application/json');
+          echo json_encode($response);
+          exit;
+      }
+    } else {
+        // If <content> tag is not found, handle as an error
+        $response = [
+            "header" => [
+                "messageID" => "unknown",
+                "statusCode" => "400",
+                "statusDescription" => "Invalid request format. JSON payload missing in <content> tag."
+            ],
+            "response" => []
+        ];
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit;
+    }
 
     // Check if required headers and body fields are present
     if (
-        isset($_SERVER['HTTP_SERVICENAME']) &&
-        isset($_SERVER['HTTP_MESSAGEID']) &&
-        isset($_SERVER['HTTP_CONNECTIONID']) &&
-        isset($_SERVER['HTTP_CONNECTIONPASSWORD']) &&
+        isset($requestData['header']['serviceName']) &&
+        isset($requestData['header']['messageID']) &&
+        isset($requestData['header']['connectionID']) &&
+        isset($requestData['header']['connectionPassword']) &&
         isset($requestData['request']['TransactionReferenceCode']) &&
         isset($requestData['request']['TransactionDate']) &&
         isset($requestData['request']['TotalAmount']) &&
@@ -26,14 +58,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         isset($requestData['request']['BranchCode']) &&
         isset($requestData['request']['PaymentDate']) &&
         isset($requestData['request']['PaymentMode']) &&
+        isset($requestData['request']['InstitutionCode']) &&
+        isset($requestData['request']['InstitutionName']) &&
         isset($requestData['request']['PaymentAmount'])
     ) {
         // Extract headers
-        $serviceName = $_SERVER['HTTP_SERVICENAME'];
-        $messageID = $_SERVER['HTTP_MESSAGEID'];
-        $connectionID = $_SERVER['HTTP_CONNECTIONID'];
-        $connectionPassword = $_SERVER['HTTP_CONNECTIONPASSWORD'];
-
+        $serviceName = $requestData['header']['serviceName'];
+        $messageID = $requestData['header']['messageID'];
+        $connectionID = $requestData['header']['connectionID'];
+        $connectionPassword = $requestData['header']['connectionPassword'];
+        
         // Extract body parameters
         $transactionReferenceCode = $requestData['request']['TransactionReferenceCode'];
         $transactionDate = $requestData['request']['TransactionDate'];
@@ -49,6 +83,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $additionalInfo = $requestData['request']['AdditionalInfo'] ?? ''; // Optional field
         $accountNumber = $requestData['request']['AccountNumber'];
         $accountName = $requestData['request']['AccountName'] ?? ''; // Optional field
+        $InstitutionCode = $requestData['request']['InstitutionCode'];
+        $InstitutionName = $requestData['request']['InstitutionName'] ?? ''; // Optional field
 
         // Validate the connectionID with your database
         $sql = "SELECT * FROM connections WHERE connectionID = ?";
@@ -88,12 +124,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             PaymentAmount, 
                             AdditionalInfo, 
                             AccountNumber, 
-                            AccountName
-                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                            AccountName,
+                            InstitutionCode,
+                            InstitutionName
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     
                     $insertStmt = $conn->prepare($insertSql);
                     $insertStmt->bind_param(
-                        "sssssssssssdss", 
+                        "sssssssssssdssss", 
                         $transactionReferenceCode, 
                         $transactionDate, 
                         $totalAmount, 
@@ -107,7 +145,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $paymentAmount, 
                         $additionalInfo, 
                         $accountNumber, 
-                        $accountName
+                        $accountName,
+                        $InstitutionCode,
+                        $InstitutionName
                     );
                     
                     if ($insertStmt->execute()) {
@@ -116,14 +156,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             "header" => [
                                 "messageID" => $messageID,
                                 "statusCode" => "200",
-                                "statusDescription" => "Payment successfully received and stored"
+                                "statusDescription" => "Payment successfully received"
                             ],
                             "response" => [
                                 "TransactionReferenceCode" => $transactionReferenceCode,
                                 "TransactionDate" => $transactionDate,
                                 "TransactionAmount" => $totalAmount,
                                 "AccountNumber" => $accountNumber,
-                                "AccountName" => $accountName
+                                "AccountName" => $accountName,
+                                "InstitutionCode" => $InstitutionCode,
+                                "InstitutionName" => $InstitutionName
                             ]
                         ];
                     } else {
@@ -198,5 +240,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
     echo json_encode($response);
 }
-
 ?>
+
+
+
+
