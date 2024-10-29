@@ -1,5 +1,5 @@
 <?php
-// Include the database connection file
+// database connection 
 include_once __DIR__ . '/../../config/config.php';
 
 // Define the endpoint for receiving validation requests
@@ -7,33 +7,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the raw POST data (the request body)
     $rawPostData = file_get_contents('php://input');
 
-    
-    // Extract JSON within <content> tags
-    if (preg_match('/<content>(.*?)<\/content>/s', $rawPostData, $matches)) {
-        $jsonRequest = $matches[1];  // Extracted JSON part
-        $requestData = json_decode($jsonRequest, true);
-        
-        // Check for JSON decoding errors
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            $response = [
-                "header" => [
-                    "messageID" => "unknown",
-                    "statusCode" => "400",
-                    "statusDescription" => "Invalid JSON format."
-                ],
-                "response" => []
-            ];
-            header('Content-Type: application/json');
-            echo json_encode($response);
-            exit;
-        }
-    } else {
-        // If <content> tag is not found, handle as an error
+    // Decode the JSON request directly
+    $requestData = json_decode($rawPostData, true);
+
+    // Check for JSON decoding errors
+    if (json_last_error() !== JSON_ERROR_NONE) {
         $response = [
             "header" => [
                 "messageID" => "unknown",
                 "statusCode" => "400",
-                "statusDescription" => "Invalid request format. JSON payload missing in <content> tag."
+                "statusDescription" => "Invalid JSON format."
             ],
             "response" => []
         ];
@@ -172,3 +155,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
     echo json_encode($response);
 }
+
+
+
+
+
+
+// {
+//                     "header": {
+//                         "connectionID": "DGFIKC",
+//                         "connectionPassword": "#CpiKc.21",
+//                         "messageID": "367f83c1-433c-4c00-8b17-b71dbeb1dca7",
+//                         "serviceName": "IKIGAI COLLEGE OF DESIGN"
+                        
+//                     },
+//                     "request": {
+//                         "TransactionReferenceCode": "DID212-0287/2024",
+//                         "TransactionDate": "2019-08-28T17:32:02.7460598+03:00",
+//                         "InstitutionCode": "2100082"
+                        
+//                     }
+//                 }

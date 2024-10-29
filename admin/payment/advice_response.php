@@ -1,40 +1,22 @@
 <?php
-
-// Include the database connection file
+// database connection 
 include_once __DIR__ . '/../../config/config.php';
 
-// Define the endpoint for receiving payment advice requests
+// Define the endpoint for receiving validation requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  // Get the raw POST data (the request body)
-  $rawPostData = file_get_contents('php://input');
+    // Get the raw POST data (the request body)
+    $rawPostData = file_get_contents('php://input');
 
-    
-  // Extract JSON within <content> tags
-  if (preg_match('/<content>(.*?)<\/content>/s', $rawPostData, $matches)) {
-      $jsonRequest = $matches[1];  // Extracted JSON part
-      $requestData = json_decode($jsonRequest, true);
-      
-      // Check for JSON decoding errors
-      if (json_last_error() !== JSON_ERROR_NONE) {
-          $response = [
-              "header" => [
-                  "messageID" => "unknown",
-                  "statusCode" => "400",
-                  "statusDescription" => "Invalid JSON format."
-              ],
-              "response" => []
-          ];
-          header('Content-Type: application/json');
-          echo json_encode($response);
-          exit;
-      }
-    } else {
-        // If <content> tag is not found, handle as an error
+    // Decode the JSON request directly
+    $requestData = json_decode($rawPostData, true);
+
+    // Check for JSON decoding errors
+    if (json_last_error() !== JSON_ERROR_NONE) {
         $response = [
             "header" => [
                 "messageID" => "unknown",
                 "statusCode" => "400",
-                "statusDescription" => "Invalid request format. JSON payload missing in <content> tag."
+                "statusDescription" => "Invalid JSON format."
             ],
             "response" => []
         ];
