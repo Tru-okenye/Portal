@@ -24,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode($response);
         exit;
     }
-
     // Check if required headers and body fields are present
     if (
         isset($requestData['header']['serviceName']) &&
@@ -42,8 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         isset($requestData['request']['PaymentMode']) &&
         isset($requestData['request']['InstitutionCode']) &&
         isset($requestData['request']['InstitutionName']) &&
-        isset($requestData['request']['PaymentAmount']) &&
-        isset($requestData['request']['PaymentCode'])
+        isset($requestData['request']['PaymentAmount']) 
     ) {
         // Extract headers
         $serviceName = $requestData['header']['serviceName'];
