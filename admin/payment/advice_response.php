@@ -42,7 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         isset($requestData['request']['PaymentMode']) &&
         isset($requestData['request']['InstitutionCode']) &&
         isset($requestData['request']['InstitutionName']) &&
-        isset($requestData['request']['PaymentAmount'])
+        isset($requestData['request']['PaymentAmount']) &&
+        isset($requestData['request']['PaymentCode'])
     ) {
         // Extract headers
         $serviceName = $requestData['header']['serviceName'];
@@ -67,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $accountName = $requestData['request']['AccountName'] ?? ''; // Optional field
         $InstitutionCode = $requestData['request']['InstitutionCode'];
         $InstitutionName = $requestData['request']['InstitutionName'] ?? ''; // Optional field
+        $paymentCode = $requestData['request']['PaymentCode'] ?? ''; 
 
         // Validate the connectionID with your database
         $sql = "SELECT * FROM connections WHERE connectionID = ?";
@@ -81,10 +83,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Verify the password (assuming it's hashed in the database)
             if (password_verify($connectionPassword, $connection['connectionPassword'])) {
-                // Validate the TransactionReferenceCode against the students table
+                // Validate the AccountNumber against the students table
                 $sql = "SELECT * FROM students WHERE AdmissionNumber = ?";
                 $stmt = $conn->prepare($sql);
-                $stmt->bind_param("s", $transactionReferenceCode);
+                $stmt->bind_param("s", $accountNumber);
                 $stmt->execute();
                 $studentResult = $stmt->get_result();
 
