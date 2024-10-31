@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                     $insertStmt = $conn->prepare($insertSql);
                     $insertStmt->bind_param(
-                        "sssssssssssdssss", 
+                        "ssssssssssssssss", 
                         $transactionReferenceCode, 
                         $transactionDate, 
                         $totalAmount, 
