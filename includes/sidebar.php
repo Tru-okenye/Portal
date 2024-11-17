@@ -334,6 +334,19 @@
                         <li><a href="index.php?page=examinations/supp_pass_list">Supp&Retake</a></li>
                     </ul>
                 </li>
+
+                <li class="dropdown">
+                    <button class="dropdown-btn">
+                        <i class="fa-solid fa-file-invoice"></i>
+                        <span>Fees</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                    <ul class="dropdown-menu" data-dropdown="Fees">
+                    <li><a href="index.php?page=payment/fee_entry">Fee entry</a></li>
+                    </ul>
+                </li>
+
+
                 <li class="dropdown">
                     <button class="dropdown-btn">
                         <i class="fa-solid fa-file-invoice"></i>
