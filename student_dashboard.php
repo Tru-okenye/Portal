@@ -16,7 +16,7 @@ if (!isset($_SESSION['student_admission_number'])) {
 $admission_number = $_SESSION['student_admission_number'];
 
 // Fetch student details (name and other details)
-$sql = "SELECT FirstName, LastName, CourseName, CategoryName FROM students WHERE AdmissionNumber = ?";
+$sql = "SELECT FirstName, LastName, CourseName, CategoryName, IntakeName, RegistrationDate  FROM students WHERE AdmissionNumber = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $admission_number);
 $stmt->execute();
@@ -29,6 +29,9 @@ if ($result->num_rows > 0) {
     $last_name = $student['LastName'];
     $course_name = $student['CourseName'];
     $category_name = $student['CategoryName'];
+    $intake_name = $student['IntakeName'];
+    $registration_date = $student['RegistrationDate'];
+    $year = date('Y', strtotime($registration_date));
 } else {
     echo "Student details not found!";
     exit();
