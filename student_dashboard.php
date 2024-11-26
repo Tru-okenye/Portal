@@ -62,6 +62,110 @@ if ($course_id_result->num_rows > 0) {
     echo "Course not found!";
 }
 
+
+// Initialize total fee balance
+$total_fee_balance = 0;
+
+// Step 2: Fetch semester schedules based on category, intake, and year
+$schedule_sql = "
+    SELECT semester, start_date, end_date 
+    FROM semester_schedule
+    WHERE category_name = ? AND intake = ? AND year = ?
+    ORDER BY start_date";
+$stmt_schedule = $conn->prepare($schedule_sql);
+if (!$stmt_schedule) {
+    die("SQL preparation error: " . $conn->error);
+}
+$stmt_schedule->bind_param("ssi", $category_name, $intake_name, $year); 
+$stmt_schedule->execute();
+$schedule_results = $stmt_schedule->get_result();
+
+
+while ($schedule = $schedule_results->fetch_assoc()) {
+    $semester_number = $schedule['semester'];
+    $start_date = $schedule['start_date'];
+    $end_date = $schedule['end_date'];
+
+    // Compute academic year from the start date
+    $start_year = date('Y', strtotime($start_date));
+    $next_year = $start_year + 1;
+    $academic_year = "{$start_year}/{$next_year}";
+    // Determine year_of_study and SemesterNumber for the current semester
+    $year_of_study = ($semester_number <= 3) ? 1 : 2;
+    $adjusted_semester_number = ($semester_number <= 3) ? $semester_number : $semester_number - 3;
+
+
+    // Fetch the fee amount from the fee_rules table
+    $fee_rule_sql = "
+        SELECT FeeAmount 
+        FROM fee_rules 
+        WHERE AdmissionNumber = ? AND year_of_study = ? AND SemesterNumber = ?";
+    $stmt_fee_rule = $conn->prepare($fee_rule_sql);
+    $stmt_fee_rule->bind_param("sii", $admission_number, $year_of_study, $adjusted_semester_number);
+    $stmt_fee_rule->execute();
+    $fee_rule_result = $stmt_fee_rule->get_result();
+
+    if ($fee_rule_result->num_rows > 0) {
+        // Custom fee exists for this semester
+        $rule = $fee_rule_result->fetch_assoc();
+        $fee_amount = $rule['FeeAmount'];
+    } else {
+            // Check the registration year and decide which table to use
+        if ($year == 2024) {
+            // Fallback to the fee_structure table
+            $fee_sql = "
+                SELECT FeeAmount 
+                FROM fee_structure 
+                WHERE CategoryName = ? AND SemesterNumber = ?";
+        } else {
+            // Fallback to the fee_structure2 table
+            $fee_sql = "
+                SELECT FeeAmount 
+                FROM fee_structure2 
+                WHERE CategoryName = ? AND SemesterNumber = ?";
+        }
+        $stmt_fee = $conn->prepare($fee_sql);
+        $stmt_fee->bind_param("si", $category_name, $semester_number);
+        $stmt_fee->execute();
+        $fee_result = $stmt_fee->get_result();
+
+        if ($fee_result->num_rows > 0) {
+            $fee_row = $fee_result->fetch_assoc();
+            $fee_amount = $fee_row['FeeAmount'];
+        } else {
+            echo "<p>Fee structure not found for semester {$semester_number}.</p>";
+            continue;
+        }
+    }
+
+
+    // Fetch payments for the semester from the payments table
+    $payments_sql = "
+        SELECT PaymentAmount 
+        FROM payments
+        WHERE DocumentReferenceNumber = ? AND PaymentDate BETWEEN ? AND ?";
+    $stmt_payments = $conn->prepare($payments_sql);
+    $stmt_payments->bind_param("sss", $admission_number, $start_date, $end_date);
+    $stmt_payments->execute();
+    $payments_result = $stmt_payments->get_result();
+
+    // Calculate total payments for the semester
+    $total_paid = 0;
+    while ($payment = $payments_result->fetch_assoc()) {
+        $total_paid += $payment['PaymentAmount'];
+    }
+
+    // Calculate fee balance for the semester
+    $semester_balance = $fee_amount - $total_paid;
+   
+
+    // Add semester balance to total balance
+    $total_fee_balance += $semester_balance;
+
+}
+
+
+$stmt_schedule->close();
 ?>
 
 
@@ -175,7 +279,7 @@ th {
                 Fee Balance:
             </h2>
             <!-- <h3>Kes 0.00</h3> -->
-            <h3>Will be updated</h3>
+            <h3> <?php echo "Ksh $total_fee_balance"; ?> </h3>
         </div>
 
         <?php
@@ -230,6 +334,34 @@ th {
             echo "<h3>Year: $year_of_study</h3>";
             echo "<h3>Semester $current_semester</h3>";
             echo '</div>'; // Close the year and semester container
+
+
+                        // Check if total balance is 0 or less
+            if ($total_fee_balance <= 0) {
+                // Update units status for the current semester to "Approved"
+                $update_units_sql = "
+                    UPDATE unit_registrations 
+                    SET status = 'Approved'
+                    WHERE admission_number = ? 
+                    AND year_of_study = ? 
+                    AND semester = ?";
+                
+                $stmt_update_units = $conn->prepare($update_units_sql);
+                $stmt_update_units->bind_param("sii", $admission_number, $year_of_study, $current_semester);
+
+                if ($stmt_update_units->execute()) {
+                    // echo "<p>Units for the current semester have been approved.</p>";
+                    $error_message = "units for the current semester have been approved.";
+                } else {
+                    // echo "<p>Failed to update unit statuses: " . $stmt_update_units->error . "</p>";
+                    $error_message = "Failed to update units.";
+                }
+
+                $stmt_update_units->close();
+            } else {
+                // echo "<p>Fee balance is not cleared. Units cannot be approved.</p>";
+                $error_message = "Fee balance is not cleared. Units cannot be approved.";
+            }
         } else {
             echo "No semester reporting history found!";
         }
@@ -237,4 +369,8 @@ th {
     </div>
 </body>
 </html>
+
+
+
+
 

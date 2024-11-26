@@ -283,7 +283,8 @@
                     </button>
                     <ul class="dropdown-menu" data-dropdown="academic">
                         <li><a href="index.php?page=Academics/units">Units</a></li>
-                        <li><a href="#">Examcard</a></li>
+                        <li><a href="index.php?page=Academics/exam_card">Examcard</a></li>
+
                     <li><a href="index.php?page=Academics/slip_form">ResultsSlips</a></li>
 
                     </ul>
@@ -297,7 +298,8 @@
                     </button>
                     <ul class="dropdown-menu" data-dropdown="financials">
                         <li><a href="#">Fees Structure</a></li>
-                        <li><a href="#">Fees Statement</a></li>
+                        <li><a href="index.php?page=fees/fee_statement">Fees Statement</a></li>
+
                     </ul>
                 </li>
 
